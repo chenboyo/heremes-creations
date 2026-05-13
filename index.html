@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hermes AI 創作收藏</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a24;
+      --accent: #7c5ce7;
+      --accent-light: #a78bfa;
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888a0;
+      --border: #2a2a3a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 80px 24px 60px;
+      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 500px;
+      margin: 0 auto 32px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.85rem;
+      color: var(--accent-light);
+    }
+
+    /* Category Nav */
+    .categories {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 24px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg-primary);
+      z-index: 100;
+    }
+
+    .cat-btn {
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .cat-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent-light);
+    }
+
+    .cat-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    /* Gallery Grid */
+    .gallery {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+
+    .card img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .card-tag {
+      padding: 2px 8px;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: var(--accent-light);
+    }
+
+    /* Empty State */
+    .empty {
+      text-align: center;
+      padding: 80px 24px;
+      color: var(--text-secondary);
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 48px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--accent-light);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Hidden sections */
+    .section { display: block; }
+    .section.hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <h1>AI 創作收藏</h1>
+    <p>由 Hermes Agent 驅動的 AI 生成圖片、音樂、影片作品展示</p>
+    <div class="badge">
+      <span>✦</span>
+      <span>Powered by Hermes Agent</span>
+    </div>
+  </header>
+
+  <nav class="categories">
+    <button class="cat-btn active" data-filter="all">全部</button>
+    <button class="cat-btn" data-filter="images">圖片</button>
+    <button class="cat-btn" data-filter="music">音樂</button>
+    <button class="cat-btn" data-filter="video">影片</button>
+  </nav>
+
+  <main class="gallery">
+    <!-- Images Section -->
+    <section class="section" data-category="images">
+      <h2 class="section-title">🖼️ 圖片作品</h2>
+      <div class="grid">
+
+        <article class="card">
+          <img src="images/wuxia/wuxia_cover_1.png" alt="武俠封面 1" loading="lazy">
+          <div class="card-body">
+            <h3 class="card-title">武俠小說封面 — 江湖俠影</h3>
+            <div class="card-meta">
+              <span class="card-tag">AI 生成</span>
+              <span>2025-05-13</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="images/wuxia/wuxia_cover_2.png" alt="武俠封面 2" loading="lazy">
+          <div class="card-body">
+            <h3 class="card-title">武俠小說封面 — 武林秘笈</h3>
+            <div class="card-meta">
+              <span class="card-tag">AI 生成</span>
+              <span>2025-05-13</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Music Section -->
+    <section class="section hidden" data-category="music">
+      <h2 class="section-title">🎵 音樂作品</h2>
+      <div class="empty">
+        <div class="empty-icon">🎧</div>
+        <p>還沒有音樂作品</p>
+        <p style="font-size: 0.9rem; margin-top: 8px;">使用 Hermes 的 Suno/音樂生成功能來創作</p>
+      </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="section hidden" data-category="video">
+      <h2 class="section-title">🎬 影片作品</h2>
+      <div class="empty">
+        <div class="empty-icon">🎥</div>
+        <p>還沒有影片作品</p>
+        <p style="font-size: 0.9rem; margin-top: 8px;">使用 Hermes 的影片生成功能來創作</p>
+      </div>
+    </section>
+
+    <!-- All Media (for "all" filter) -->
+    <section class="section" data-category="all-media">
+      <div class="grid" id="all-media-grid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>由 <a href="https://github.com/chenboyo/heremes-creations" target="_blank">Hermes Agent</a> 自動生成與維護</p>
+    <p style="margin-top: 8px;">© 2025 chenboyo. MIT License.</p>
+  </footer>
+
+  <script>
+    // Category filter
+    const catBtns = document.querySelectorAll('.cat-btn');
+    const sections = document.querySelectorAll('.gallery .section');
+
+    catBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+
+        // Update active button
+        catBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Show/hide sections
+        sections.forEach(sec => {
+          const cat = sec.dataset.category;
+          if (filter === 'all') {
+            sec.classList.toggle('hidden', cat !== 'images');
+          } else {
+            sec.classList.toggle('hidden', cat !== filter);
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
