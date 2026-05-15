@@ -29,39 +29,50 @@
     margin-bottom: 10px;
   }
   .subtitle { font-size: 1.1em; color: rgba(255,255,255,0.5); margin-bottom: 40px; }
+  .section-title {
+    font-size: 1.15em;
+    font-weight: 700;
+    color: rgba(255,255,255,0.35);
+    margin: 28px 0 14px;
+    text-align: left;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
   .card {
     display: block;
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 20px;
-    padding: 28px 32px;
-    margin-bottom: 16px;
+    padding: 26px 30px;
+    margin-bottom: 12px;
     text-decoration: none;
     color: inherit;
     transition: all 0.3s ease;
     text-align: left;
   }
   .card:hover {
-    background: rgba(0,212,170,0.1);
+    background: rgba(0,212,170,0.08);
     border-color: #00d4aa;
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0,212,170,0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0,212,170,0.12);
   }
-  .card .icon { font-size: 2.2em; margin-bottom: 10px; display: block; }
-  .card h2 { font-size: 1.3em; font-weight: 800; color: #66ffdd; margin-bottom: 6px; }
-  .card p { color: rgba(255,255,255,0.6); line-height: 1.5; font-size: 0.95em; }
+  .card .icon { font-size: 2em; margin-bottom: 8px; display: block; }
+  .card h2 { font-size: 1.2em; font-weight: 800; color: #66ffdd; margin-bottom: 5px; }
+  .card p { color: rgba(255,255,255,0.55); line-height: 1.5; font-size: 0.92em; }
   .card .tag {
     display: inline-block;
-    margin-top: 10px;
-    margin-right: 6px;
-    padding: 4px 12px;
+    margin-top: 8px;
+    margin-right: 5px;
+    padding: 3px 10px;
     border-radius: 50px;
-    background: rgba(0,212,170,0.15);
-    color: #00d4aa;
-    font-size: 0.8em;
+    font-size: 0.78em;
     font-weight: 700;
   }
-  .card .tag.orange { background: rgba(240,192,64,0.15); color: #f0c040; }
+  .tag-teal { background: rgba(0,212,170,0.15); color: #00d4aa; }
+  .tag-orange { background: rgba(240,192,64,0.15); color: #f0c040; }
+  .tag-purple { background: rgba(168,85,247,0.15); color: #a855f7; }
+  .tag-green { background: rgba(109,184,109,0.15); color: #6db86d; }
+  .tag-blue { background: rgba(91,181,240,0.15); color: #5bb5f0; }
   .footer { margin-top: 40px; color: rgba(255,255,255,0.25); font-size: 0.85em; }
   .footer a { color: rgba(255,255,255,0.35); text-decoration: none; }
   .footer a:hover { color: #00d4aa; }
@@ -72,25 +83,56 @@
   <h1>🎓 英文互動學習教材</h1>
   <p class="subtitle">English Interactive Learning Materials — 邊玩邊學，輕鬆進步！</p>
 
+  <div class="section-title">📖 閱讀理解系列</div>
+
   <a href="whale-reading-fun.html" class="card">
     <span class="icon">🐋</span>
     <h2>鯨魚英文閱讀大冒險</h2>
-    <p>Whale Reading Adventure — 閱讀文章、單字學習、文法重點、閱讀測驗、配對遊戲、趣味知識，六大互動功能一次滿足！</p>
-    <span class="tag">📖 閱讀測驗</span>
-    <span class="tag">🎮 互動遊戲</span>
-    <span class="tag">🔊 語音朗讀</span>
+    <p>Whale Reading Adventure — 閱讀文章、單字學習、文法重點、閱讀測驗、配對遊戲、趣味知識，六大互動功能！</p>
+    <span class="tag tag-teal">📖 閱讀測驗</span>
+    <span class="tag tag-teal">🎮 互動遊戲</span>
+    <span class="tag tag-teal">🔊 語音朗讀</span>
   </a>
 
   <a href="elephant-reading-fun.html" class="card">
     <span class="icon">🐘</span>
     <h2>大象英文閱讀大冒險</h2>
     <p>Elephant Reading Adventure — 認識大象的象鼻、大耳朵散熱秘訣，學習 take care of、cool down、back and forth 等實用片語！</p>
-    <span class="tag orange">📖 閱讀測驗</span>
-    <span class="tag orange">🎮 互動遊戲</span>
-    <span class="tag orange">🔊 語音朗讀</span>
+    <span class="tag tag-orange">📖 閱讀測驗</span>
+    <span class="tag tag-orange">🎮 互動遊戲</span>
+    <span class="tag tag-orange">🔊 語音朗讀</span>
   </a>
 
-  <div style="color: rgba(255,255,255,0.2); margin-top: 20px; font-size: 0.9em;">
+  <div class="section-title">🔤 博幼英文文法 I-1</div>
+
+  <a href="grammar-unit1-be-verb.html" class="card">
+    <span class="icon">🦊</span>
+    <h2>單元一：Be 動詞遇見主詞</h2>
+    <p>Be 動詞三俠（am/is/are）各自認誰？魔法師故事 + 間諜配對遊戲，學會 I am / You are / He is / She is！</p>
+    <span class="tag tag-purple">🔤 文法</span>
+    <span class="tag tag-purple">🎮 配對遊戲</span>
+    <span class="tag tag-purple">🔊 語音朗讀</span>
+  </a>
+
+  <a href="grammar-unit2-a-vs-an.html" class="card">
+    <span class="icon">⚔️</span>
+    <h2>單元二：a vs an 世紀大對決</h2>
+    <p>真相只有一個——看發音，不看字母！hour 用 an？university 用 a？單字閃卡 + 快問快答，一次搞懂！</p>
+    <span class="tag tag-blue">🔤 文法</span>
+    <span class="tag tag-blue">⚡ 快問快答</span>
+    <span class="tag tag-blue">🔊 語音朗讀</span>
+  </a>
+
+  <a href="grammar-unit3-countable.html" class="card">
+    <span class="icon">🔢</span>
+    <h2>單元三：可數 vs 不可數名詞</h2>
+    <p>東西數得了嗎？三大不可數家族（抽象、顆粒、液體）+ 獵人遊戲 + 分類挑戰，學會 a glass of water！</p>
+    <span class="tag tag-green">🔤 文法</span>
+    <span class="tag tag-green">🗂️ 分類挑戰</span>
+    <span class="tag tag-green">🔊 語音朗讀</span>
+  </a>
+
+  <div style="color: rgba(255,255,255,0.2); margin-top: 24px; font-size: 0.9em;">
     📌 更多教材持續新增中⋯⋯
   </div>
 
