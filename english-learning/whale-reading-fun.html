@@ -1496,5 +1496,98 @@ window.addEventListener('load', () => {
   }
 });
 </script>
+
+<!-- ===== Tone.js Background Music ===== -->
+<button id="musicBtn" onclick="toggleMusic()" style="position:fixed;bottom:20px;right:20px;z-index:10000;width:50px;height:50px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);color:#fff;font-size:1.3em;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.3);" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">🔇</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+<script>
+(function(){
+  var isPlaying = false;
+  var started = false;
+  var melodyConfig = {"oscType": "sine", "bpm": 72, "notes": ["D4", "F4", "A4", "D5", "C5", "B4", "A4", "G4", "F4", "E4", "D4", "E4", "F4", "G4", "A4", "B4", "A4", "G4", "F4", "D4"], "durations": ["4n", "4n", "4n", "2n", "4n", "4n", "4n", "4n", "4n", "4n", "4n", "4n", "4n", "4n", "2n", "4n", "4n", "4n", "4n", "2n"], "bassNotes": ["D2", "D2", "G2", "G2", "C2", "C2", "D2", "D2"], "bassDurations": ["2n", "2n", "2n", "2n", "2n", "2n", "2n", "2n"]};
+
+  var synth = new Tone.PolySynth(Tone.Synth, {
+    oscillator: { type: melodyConfig.oscType || "triangle" },
+    envelope: { attack: 0.02, decay: 0.3, sustain: 0.15, release: 0.8 },
+    volume: -14
+  }).toMaster();
+
+  var bassSynth = new Tone.Synth({
+    oscillator: { type: "sine" },
+    envelope: { attack: 0.05, decay: 0.5, sustain: 0.2, release: 1.0 },
+    volume: -20
+  }).toMaster();
+
+  var melodyPart = null;
+  var bassPart = null;
+
+  function buildMelody(){
+    var notes = melodyConfig.notes;
+    var durs = melodyConfig.durations;
+    var events = [];
+    var t = 0;
+    for(var i = 0; i < notes.length; i++){
+      var dur = Tone.Time(durs[i] || "4n").toSeconds();
+      events.push({ time: t, note: notes[i], duration: durs[i] || "4n" });
+      t += dur;
+    }
+    melodyPart = new Tone.Part(function(time, ev){
+      synth.triggerAttackRelease(ev.note, ev.duration, time);
+    }, events);
+    melodyPart.loop = true;
+    melodyPart.loopEnd = t;
+  }
+
+  function buildBass(){
+    var notes = melodyConfig.bassNotes;
+    var durs = melodyConfig.bassDurations;
+    var events = [];
+    var t = 0;
+    for(var i = 0; i < notes.length; i++){
+      var dur = Tone.Time(durs[i] || "2n").toSeconds();
+      events.push({ time: t, note: notes[i], duration: durs[i] || "2n" });
+      t += dur;
+    }
+    bassPart = new Tone.Part(function(time, ev){
+      bassSynth.triggerAttackRelease(ev.note, ev.duration, time);
+    }, events);
+    bassPart.loop = true;
+    bassPart.loopEnd = t;
+  }
+
+  window.toggleMusic = function(){
+    Tone.start();
+    var btn = document.getElementById('musicBtn');
+    if(!started){
+      buildMelody();
+      buildBass();
+      Tone.Transport.bpm.value = melodyConfig.bpm || 100;
+      if(melodyPart) melodyPart.start(0);
+      if(bassPart) bassPart.start(0);
+      Tone.Transport.start();
+      started = true;
+      isPlaying = true;
+      btn.textContent = '🔊';
+      btn.style.borderColor = 'rgba(255,255,255,0.7)';
+      btn.style.boxShadow = '0 0 20px rgba(255,255,255,0.25)';
+      return;
+    }
+    if(isPlaying){
+      Tone.Transport.pause();
+      isPlaying = false;
+      btn.textContent = '🔇';
+      btn.style.borderColor = 'rgba(255,255,255,0.3)';
+      btn.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
+    } else {
+      Tone.Transport.start();
+      isPlaying = true;
+      btn.textContent = '🔊';
+      btn.style.borderColor = 'rgba(255,255,255,0.7)';
+      btn.style.boxShadow = '0 0 20px rgba(255,255,255,0.25)';
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
