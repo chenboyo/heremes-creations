@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐘 大象英文閱讀大冒險 | Elephant Reading Adventure</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --savanna-deep: #1a0f0a;
+    --savanna-mid: #2d1f14;
+    --savanna-light: #4a3728;
+    --earth-brown: #8b6914;
+    --sunset-orange: #e8834a;
+    --sunset-light: #f4a97a;
+    --grass-green: #6db86d;
+    --grass-light: #9ee89e;
+    --gold: #f0c040;
+    --gold-light: #ffe08a;
+    --coral: #e06060;
+    --coral-light: #ff9090;
+    --purple: #a855f7;
+    --purple-light: #c084fc;
+    --white: #ffffff;
+    --off-white: #f0e8e0;
+    --bubble: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', 'Noto Sans TC', sans-serif;
+    background: var(--savanna-deep);
+    color: var(--off-white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== ANIMATED SAVANNA BACKGROUND ===== */
+  .savanna-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .grass-particle {
+    position: absolute;
+    bottom: -20px;
+    width: 3px;
+    border-radius: 3px 3px 0 0;
+    background: linear-gradient(to top, var(--grass-green), var(--grass-light));
+    animation: sway linear infinite;
+    opacity: 0.15;
+  }
+
+  @keyframes sway {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-15px) rotate(3deg); }
+  }
+
+  .dust {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(to top, rgba(139,105,20,0.08), transparent);
+    animation: dustWave 10s ease-in-out infinite;
+  }
+
+  @keyframes dustWave {
+    0%, 100% { opacity: 0.5; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.3); }
+  }
+
+  /* ===== MAIN CONTAINER ===== */
+  .app-container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+  }
+
+  .header h1 {
+    font-size: 2.4em;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--sunset-light), var(--gold), var(--grass-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  .header .subtitle {
+    font-size: 1.1em;
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+  }
+
+  .elephant-emoji {
+    font-size: 3em;
+    display: block;
+    margin-bottom: 10px;
+    animation: elephantWalk 4s ease-in-out infinite;
+  }
+
+  @keyframes elephantWalk {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(-5px) rotate(-2deg); }
+    75% { transform: translateX(5px) rotate(2deg); }
+  }
+
+  /* ===== NAVIGATION TABS ===== */
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nav-tab {
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 2px solid rgba(240,192,64,0.3);
+    background: transparent;
+    color: var(--gold);
+    font-family: inherit;
+    font-size: 0.95em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .nav-tab:hover {
+    background: rgba(240,192,64,0.1);
+    border-color: var(--gold);
+    transform: translateY(-2px);
+  }
+
+  .nav-tab.active {
+    background: var(--gold);
+    color: var(--savanna-deep);
+    border-color: var(--gold);
+    box-shadow: 0 4px 20px rgba(240,192,64,0.3);
+  }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .section.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--bubble);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--sunset-orange), var(--gold), var(--grass-green));
+  }
+
+  .card-title {
+    font-size: 1.4em;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-title .icon {
+    font-size: 1.3em;
+  }
+
+  /* ===== READING PASSAGE ===== */
+  .passage {
+    font-size: 1.15em;
+    line-height: 1.9;
+    color: var(--off-white);
+  }
+
+  .passage p {
+    margin-bottom: 16px;
+  }
+
+  .highlight-word {
+    position: relative;
+    cursor: pointer;
+    color: var(--gold-light);
+    font-weight: 700;
+    border-bottom: 2px dashed rgba(240,192,64,0.4);
+    transition: all 0.2s;
+  }
+
+  .highlight-word:hover {
+    color: var(--sunset-light);
+    border-bottom-color: var(--sunset-light);
+  }
+
+  .highlight-word .tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--savanna-mid);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 0.85em;
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .highlight-word .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--gold);
+  }
+
+  .highlight-word:hover .tooltip {
+    display: block;
+    animation: tooltipIn 0.2s ease;
+  }
+
+  @keyframes tooltipIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(5px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  /* ===== VOCABULARY SECTION ===== */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  .vocab-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vocab-card:hover {
+    background: rgba(240,192,64,0.08);
+    border-color: var(--gold);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(240,192,64,0.12);
+  }
+
+  .vocab-card .en {
+    font-size: 1.2em;
+    font-weight: 800;
+    color: var(--gold-light);
+    margin-bottom: 4px;
+  }
+
+  .vocab-card .pos {
+    font-size: 0.8em;
+    color: var(--sunset-light);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .vocab-card .zh {
+    font-size: 0.95em;
+    color: rgba(255,255,255,0.65);
+  }
+
+  .vocab-card .play-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(240,192,64,0.15);
+    border: none;
+    color: var(--gold);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    transition: all 0.2s;
+  }
+
+  .vocab-card .play-btn:hover {
+    background: var(--gold);
+    color: var(--savanna-deep);
+  }
+
+  /* ===== QUIZ SECTION ===== */
+  .quiz-question {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .quiz-question.answered {
+    pointer-events: none;
+  }
+
+  .quiz-question.correct {
+    border-color: var(--grass-green);
+    background: rgba(109,184,109,0.08);
+  }
+
+  .quiz-question.wrong {
+    border-color: var(--coral);
+    background: rgba(224,96,96,0.08);
+  }
+
+  .q-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sunset-orange), var(--gold));
+    color: var(--savanna-deep);
+    font-weight: 800;
+    font-size: 0.95em;
+    margin-right: 10px;
+  }
+
+  .q-text {
+    font-size: 1.05em;
+    font-weight: 600;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1em;
+  }
+
+  .option:hover:not(.disabled) {
+    border-color: var(--gold);
+    background: rgba(240,192,64,0.08);
+    transform: translateX(5px);
+  }
+
+  .option.selected {
+    border-color: var(--gold);
+    background: rgba(240,192,64,0.12);
+  }
+
+  .option.correct-answer {
+    border-color: var(--grass-green) !important;
+    background: rgba(109,184,109,0.18) !important;
+  }
+
+  .option.wrong-answer {
+    border-color: var(--coral) !important;
+    background: rgba(224,96,96,0.12) !important;
+  }
+
+  .option.disabled {
+    cursor: default;
+  }
+
+  .option-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    font-weight: 700;
+    font-size: 0.9em;
+    flex-shrink: 0;
+  }
+
+  .q-explanation {
+    margin-top: 14px;
+    padding: 14px 18px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 12px;
+    font-size: 0.95em;
+    line-height: 1.6;
+    display: none;
+    border-left: 3px solid var(--grass-green);
+  }
+
+  .q-explanation.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* ===== SCORE DISPLAY ===== */
+  .score-display {
+    text-align: center;
+    padding: 30px;
+  }
+
+  .score-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: conic-gradient(var(--gold) var(--score-deg), rgba(255,255,255,0.05) 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    position: relative;
+  }
+
+  .score-circle::before {
+    content: '';
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: var(--savanna-deep);
+  }
+
+  .score-number {
+    position: relative;
+    z-index: 1;
+    font-size: 2.5em;
+    font-weight: 900;
+    color: var(--gold-light);
+  }
+
+  .score-message {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--sunset-light);
+  }
+
+  /* ===== FUN FACTS ===== */
+  .fun-fact {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 18px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: all 0.3s ease;
+  }
+
+  .fun-fact:hover {
+    background: rgba(168,85,247,0.06);
+    border-color: rgba(168,85,247,0.15);
+    transform: translateX(5px);
+  }
+
+  .fun-fact .fact-icon {
+    font-size: 2em;
+    flex-shrink: 0;
+  }
+
+  .fun-fact .fact-text {
+    font-size: 1em;
+    line-height: 1.6;
+  }
+
+  .fun-fact .fact-text strong {
+    color: var(--purple-light);
+  }
+
+  /* ===== PRONUNCIATION GUIDE ===== */
+  .speak-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 2px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 4px;
+  }
+
+  .speak-btn:hover {
+    background: var(--gold);
+    color: var(--savanna-deep);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(240,192,64,0.3);
+  }
+
+  .speak-btn.big {
+    padding: 16px 32px;
+    font-size: 1.15em;
+  }
+
+  /* ===== PROGRESS BAR ===== */
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sunset-orange), var(--gold), var(--grass-green));
+    border-radius: 10px;
+    transition: width 0.5s ease;
+  }
+
+  /* ===== GRAMMAR SECTION ===== */
+  .grammar-box {
+    background: rgba(168,85,247,0.06);
+    border: 1px solid rgba(168,85,247,0.15);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 14px;
+  }
+
+  .grammar-box h4 {
+    color: var(--purple-light);
+    font-size: 1.1em;
+    margin-bottom: 10px;
+  }
+
+  .grammar-box p {
+    line-height: 1.7;
+    color: rgba(255,255,255,0.75);
+  }
+
+  .grammar-box .example {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    font-style: italic;
+  }
+
+  .grammar-box .example .en {
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  .grammar-box .example .zh {
+    color: rgba(255,255,255,0.45);
+    font-size: 0.9em;
+  }
+
+  /* ===== MATCHING GAME ===== */
+  .matching-game {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .match-item {
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    cursor: pointer;
+    text-align: center;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.95em;
+  }
+
+  .match-item:hover {
+    border-color: var(--gold);
+    transform: scale(1.02);
+  }
+
+  .match-item.selected {
+    border-color: var(--sunset-orange);
+    background: rgba(232,131,74,0.12);
+  }
+
+  .match-item.matched {
+    border-color: var(--grass-green);
+    background: rgba(109,184,109,0.12);
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .match-item.wrong-match {
+    animation: shake 0.5s ease;
+    border-color: var(--coral);
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+
+  /* ===== CONFETTI ===== */
+  .confetti-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    animation: confettiFall 3s ease-out forwards;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    .header h1 { font-size: 1.6em; }
+    .card { padding: 22px; }
+    .vocab-grid { grid-template-columns: 1fr; }
+    .matching-game { grid-template-columns: 1fr; }
+    .nav-tab { padding: 8px 14px; font-size: 0.85em; }
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--savanna-deep); }
+  ::-webkit-scrollbar-thumb { background: var(--savanna-light); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ===== STAR RATING ===== */
+  .stars { font-size: 2em; letter-spacing: 4px; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 30px;
+    color: rgba(255,255,255,0.25);
+    font-size: 0.9em;
+  }
+</style>
+</head>
+<body>
+
+<!-- Savanna Background -->
+<div class="savanna-bg" id="savannaBg">
+  <div class="dust"></div>
+</div>
+
+<!-- Confetti -->
+<div class="confetti-container" id="confettiContainer"></div>
+
+<div class="app-container">
+  <!-- Header -->
+  <header class="header">
+    <span class="elephant-emoji">🐘</span>
+    <h1>大象英文閱讀大冒險</h1>
+    <p class="subtitle">Elephant Reading Adventure — 邊玩邊學，輕鬆閱讀！</p>
+  </header>
+
+  <!-- Progress -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('reading', this)">📖 閱讀文章</button>
+    <button class="nav-tab" onclick="showSection('vocab', this)">📝 單字學習</button>
+    <button class="nav-tab" onclick="showSection('grammar', this)">🔤 文法重點</button>
+    <button class="nav-tab" onclick="showSection('quiz', this)">🎯 閱讀測驗</button>
+    <button class="nav-tab" onclick="showSection('game', this)">🎮 配對遊戲</button>
+    <button class="nav-tab" onclick="showSection('fun', this)">💡 趣味知識</button>
+  </nav>
+
+  <!-- ===== SECTION: READING ===== -->
+  <div class="section active" id="section-reading">
+    <div class="card">
+      <div class="card-title"><span class="icon">📖</span> 閱讀文章 Reading Passage</div>
+      <button class="speak-btn big" onclick="speakPassage()">🔊 朗讀全文 (Listen to Passage)</button>
+
+      <div class="passage" id="passage" style="margin-top: 20px;">
+        <p>
+          Elephants are very
+          <span class="highlight-word" onclick="speakWord('big')">big<span class="tooltip">大的 (adj.)</span></span>
+          animals on
+          <span class="highlight-word" onclick="speakWord('land')">land<span class="tooltip">陸地 (n.)</span></span>.
+          They have
+          <span class="highlight-word" onclick="speakWord('large')">large<span class="tooltip">龐大的 (adj.)</span></span>
+          bodies,
+          <span class="highlight-word" onclick="speakWord('big ears')">big ears<span class="tooltip">大耳朵 (n.)</span></span>, and long
+          <span class="highlight-word" onclick="speakWord('trunks')">trunks<span class="tooltip">象鼻 (n.)</span></span>.
+          <span class="highlight-word" onclick="speakWord('Mother elephants')">Mother elephants<span class="tooltip">母象 (n.)</span></span>
+          <span class="highlight-word" onclick="speakWord('take care of')">take care of<span class="tooltip">照顧 (phr.)</span></span>
+          their
+          <span class="highlight-word" onclick="speakWord('babies')">babies<span class="tooltip">寶寶 (n.)</span></span>
+          for many years, and baby elephants
+          <span class="highlight-word" onclick="speakWord('drink')">drink<span class="tooltip">喝 (v.)</span></span>
+          <span class="highlight-word" onclick="speakWord('milk')">milk<span class="tooltip">奶 (n.)</span></span>
+          from their mothers.
+        </p>
+        <p>
+          An elephant's trunk is very
+          <span class="highlight-word" onclick="speakWord('useful')">useful<span class="tooltip">有用的 (adj.)</span></span>.
+          Elephants use their trunks to
+          <span class="highlight-word" onclick="speakWord('smell')">smell<span class="tooltip">聞 (v.)</span></span>,
+          drink water,
+          <span class="highlight-word" onclick="speakWord('pick up')">pick up<span class="tooltip">撿起 (phr.)</span></span>
+          food, and even
+          <span class="highlight-word" onclick="speakWord('say hello')">say hello<span class="tooltip">打招呼 (phr.)</span></span>
+          to other elephants. When an elephant wants to drink, it uses its trunk to
+          <span class="highlight-word" onclick="speakWord('suck up')">suck up<span class="tooltip">吸入 (phr.)</span></span>
+          water first. Then it puts the water into its mouth. But elephants do not drink through their trunks like we drink through a
+          <span class="highlight-word" onclick="speakWord('straw')">straw<span class="tooltip">吸管 (n.)</span></span>.
+        </p>
+        <p>
+          Elephants also use their big ears in a
+          <span class="highlight-word" onclick="speakWord('special')">special<span class="tooltip">特別的 (adj.)</span></span>
+          way. In
+          <span class="highlight-word" onclick="speakWord('hot weather')">hot weather<span class="tooltip">炎熱的天氣 (n.)</span></span>,
+          elephants move their ears
+          <span class="highlight-word" onclick="speakWord('back and forth')">back and forth<span class="tooltip">來回地 (phr.)</span></span>.
+          <span class="highlight-word" onclick="speakWord('This')">This<span class="tooltip">這（指前面整件事）</span></span>
+          helps them
+          <span class="highlight-word" onclick="speakWord('cool down')">cool down<span class="tooltip">降溫 (phr.)</span></span>,
+          because their ears have many
+          <span class="highlight-word" onclick="speakWord('blood vessels')">blood vessels<span class="tooltip">血管 (n.)</span></span>.
+          When the wind moves over their ears, their bodies can become
+          <span class="highlight-word" onclick="speakWord('cooler')">cooler<span class="tooltip">更涼爽的 (adj.)</span></span>.
+        </p>
+        <p>
+          Elephants are
+          <span class="highlight-word" onclick="speakWord('amazing')">amazing<span class="tooltip">令人驚奇的 (adj.)</span></span>
+          animals. They use their trunks in many ways, take care of their babies, and use their ears to help them stay cool. We can learn many
+          <span class="highlight-word" onclick="speakWord('fun')">fun<span class="tooltip">有趣的 (adj.)</span></span>
+          and
+          <span class="highlight-word" onclick="speakWord('interesting')">interesting<span class="tooltip">有意思的 (adj.)</span></span>
+          things about elephants.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🇹🇼</span> 中文翻譯</div>
+      <div class="passage" style="color: rgba(255,255,255,0.55); font-size: 1.05em;">
+        <p>大象是陸地上非常大的動物。牠們有龐大的身體、大大的耳朵和長長的象鼻。母象會照顧寶寶很多年，小象會喝母象的奶。</p>
+        <p>大象的象鼻非常有用。大象用象鼻來聞東西、喝水、撿起食物，甚至跟其他大象打招呼。當大象想喝水時，會先用象鼻把水吸起來，然後再把水放進嘴裡。但大象不像我們用吸管喝水那樣，直接用象鼻吸水喝。</p>
+        <p>大象還會用特別的方式使用大耳朵。天氣炎熱時，大象會來回擺動耳朵。這幫助牠們降溫，因為耳朵裡有很多血管。當風吹過耳朵時，身體就會變得更涼爽。</p>
+        <p>大象是令人驚奇的動物。牠們用象鼻做很多事、照顧寶寶，還用耳朵來保持涼爽。我們可以學到很多關於大象的有趣知識。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: VOCABULARY ===== -->
+  <div class="section" id="section-vocab">
+    <div class="card">
+      <div class="card-title"><span class="icon">📝</span> 單字學習 Vocabulary <span style="font-size:0.7em; color:rgba(255,255,255,0.35); font-weight:400;">（點擊卡片聽發音）</span></div>
+      <div class="vocab-grid" id="vocabGrid"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🎧</span> 聽力練習 Listening Practice</div>
+      <p style="margin-bottom: 16px; color: rgba(255,255,255,0.6);">聽聽看，選出正確的中文意思：</p>
+      <div id="listeningQuiz"></div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: GRAMMAR ===== -->
+  <div class="section" id="section-grammar">
+    <div class="card">
+      <div class="card-title"><span class="icon">🔤</span> 文法重點 Grammar Focus</div>
+
+      <div class="grammar-box">
+        <h4>📌 1. 代名詞 "This" 的指代用法</h4>
+        <p>在文章中，「This helps them cool down」的 <strong>This</strong> 指的是前面整句話「elephants move their ears back and forth」（大象來回擺動耳朵這件事）。</p>
+        <div class="example">
+          <div class="en">This = 大象來回擺動耳朵（這件事）幫助牠們降溫</div>
+          <div class="zh">This 可以指代前面提到的整個概念或事情</div>
+        </div>
+      </div>
+
+      <div class="grammar-box">
+        <h4>📌 2. "back and forth" 片語</h4>
+        <p>意思是「來回地」，描述一個反覆來回的動作。</p>
+        <div class="example">
+          <div class="en">Elephants move their ears back and forth.</div>
+          <div class="zh">大象來回擺動耳朵。</div>
+        </div>
+        <div class="example" style="margin-top:8px;">
+          <div class="en">The dog was running back and forth in the yard.</div>
+          <div class="zh">那隻狗在院子裡來回跑。</div>
+        </div>
+      </div>
+
+      <div class="grammar-box">
+        <h4>📌 3. "cool down" 片語動詞</h4>
+        <p>意思是「降溫、冷靜下來」。由 cool（涼爽的）+ down（向下）組成。</p>
+        <div class="example">
+          <div class="en">This helps them cool down.</div>
+          <div class="zh">這幫助牠們降溫。</div>
+        </div>
+        <div class="example" style="margin-top:8px;">
+          <div class="en">Drink some water to cool down after exercise.</div>
+          <div class="zh">運動後喝點水降溫。</div>
+        </div>
+      </div>
+
+      <div class="grammar-box">
+        <h4>📌 4. "not...like..." 比較句型</h4>
+        <p>用「not + V + like + N」表示「不像...一樣...」。</p>
+        <div class="example">
+          <div class="en">Elephants do not drink through their trunks like we drink through a straw.</div>
+          <div class="zh">大象不像我們用吸管那樣透過象鼻喝水。</div>
+        </div>
+      </div>
+
+      <div class="grammar-box">
+        <h4>📌 5. "use...to + 原形V" 結構</h4>
+        <p>表示「用...來做...」，use 後面接工具或方法，再加 to 和原動詞。</p>
+        <div class="example">
+          <div class="en">Elephants use their trunks to smell, drink water, and pick up food.</div>
+          <div class="zh">大象用象鼻來聞東西、喝水和撿起食物。</div>
+        </div>
+      </div>
+
+      <div class="grammar-box">
+        <h4>📌 6. "take care of" 片語</h4>
+        <p>意思是「照顧」，後面接被照顧的對象。</p>
+        <div class="example">
+          <div class="en">Mother elephants take care of their babies for many years.</div>
+          <div class="zh">母象會照顧寶寶很多年。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: QUIZ ===== -->
+  <div class="section" id="section-quiz">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span> 閱讀測驗 Reading Comprehension Quiz</div>
+      <p style="color: rgba(255,255,255,0.45); margin-bottom: 20px;">共 5 題，測驗你對文章的理解程度！</p>
+      <div id="quizContainer"></div>
+    </div>
+
+    <div class="card" id="scoreCard" style="display:none;">
+      <div class="score-display">
+        <div class="score-circle" id="scoreCircle">
+          <span class="score-number" id="scoreNumber">0</span>
+        </div>
+        <div class="stars" id="starDisplay"></div>
+        <p class="score-message" id="scoreMessage"></p>
+        <button class="speak-btn" style="margin-top:20px;" onclick="resetQuiz()">🔄 再試一次</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: MATCHING GAME ===== -->
+  <div class="section" id="section-game">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎮</span> 配對遊戲 Matching Game</div>
+      <p style="color: rgba(255,255,255,0.55); margin-bottom: 16px;">將英文單字與正確的中文配對！點擊英文再點擊中文。</p>
+      <p style="margin-bottom: 16px;">⏱️ 時間：<span id="gameTimer" style="color:var(--gold);font-weight:800;">0</span> 秒 | ✅ 已完成：<span id="matchCount" style="color:var(--grass-green);font-weight:800;">0</span>/8</p>
+      <div class="matching-game" id="matchingGame"></div>
+      <div id="matchResult" style="text-align:center; margin-top:20px; display:none;">
+        <p style="font-size:1.3em; font-weight:800; color:var(--gold);">🎉 太厲害了！全部配對完成！</p>
+        <p style="color:rgba(255,255,255,0.55); margin-top:8px;">總共用時：<span id="finalTime" style="color:var(--grass-green);font-weight:700;"></span> 秒</p>
+        <button class="speak-btn" style="margin-top:16px;" onclick="initMatchingGame()">🔄 再玩一次</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: FUN FACTS ===== -->
+  <div class="section" id="section-fun">
+    <div class="card">
+      <div class="card-title"><span class="icon">💡</span> 大象趣味小知識 Fun Facts About Elephants</div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">🧠</span>
+        <div class="fact-text"><strong>超強記憶力：</strong>大象的記憶力非常好，能記住幾十年前去過的水源和路線。這就是英文諺語 "An elephant never forgets"（大象永遠不會忘）的由來！</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">👃</span>
+        <div class="fact-text"><strong>象鼻超萬能：</strong>大象的象鼻有超過 40,000 條肌肉，比人全身的肌肉還多！可以用來喝水、吃東西、打招呼、洗澡，甚至畫畫！</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">👂</span>
+        <div class="fact-text"><strong>耳朵散熱：</strong>非洲象的耳朵比亞洲象大，因為非洲更熱。大象耳朵上的血管可以幫助散熱，就像汽車的散熱器一樣！</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">📏</span>
+        <div class="fact-text"><strong>陸地最大動物：</strong>非洲象是現存最大的陸地動物，成年公象體重可達 6,000 公斤，相當於 100 個國中生的體重！</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">👶</span>
+        <div class="fact-text"><strong>超長孕期：</strong>大象的懷孕期長達 22 個月，是哺乳動物中最長的！小象出生時就有 100 公斤重。</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">💧</span>
+        <div class="fact-text"><strong>一天喝超多水：</strong>大象一天可以喝下 150-300 公升的水，相當於一個家庭一個月的用水量！</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">🤝</span>
+        <div class="fact-text"><strong>很有感情：</strong>大象是少數會為同伴哀悼的動物。當有象去世時，象群會用鼻子和腳輕輕觸碰遺體，有時還會用樹葉和泥土覆蓋。</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">🏃</span>
+        <div class="fact-text"><strong>跑步速度：</strong>別看大象很重，牠們跑起來最快可達時速 40 公里，比大多數人都跑得快！</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📚</span> 相關英文片語 Idioms with "Elephant"</div>
+      <div class="fun-fact">
+        <span class="fact-icon">🐘</span>
+        <div class="fact-text"><strong>the elephant in the room</strong> — 顯而易見卻被刻意忽視的問題<br><span style="color:rgba(255,255,255,0.45);">例：The elephant in the room is that we don't have enough money.（那個顯而易見的問題就是我們錢不夠。）</span></div>
+      </div>
+      <div class="fun-fact">
+        <span class="fact-icon">🎁</span>
+        <div class="fact-text"><strong>white elephant</strong> — 昂貴卻無用的東西；白象<br><span style="color:rgba(255,255,255,0.45);">例：That old car is a white elephant — it costs too much to maintain.（那輛舊車是個白象——維護費用太高了。）</span></div>
+      </div>
+      <div class="fun-fact">
+        <span class="fact-icon">🧠</span>
+        <div class="fact-text"><strong>an elephant never forgets</strong> — 記憶力極好的人<br><span style="color:rgba(255,255,255,0.45);">例：She remembered my birthday from 10 years ago — an elephant never forgets!（她記得我十年前的生日——真是好記性！）</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    🐘 大象英文閱讀大冒險 — 讓學習變得有趣！
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const vocabulary = [
+  { en: "elephant", pos: "n.", zh: "大象", ipa: "/ˈɛləfənt/" },
+  { en: "trunk", pos: "n.", zh: "象鼻", ipa: "/trʌŋk/" },
+  { en: "take care of", pos: "片語", zh: "照顧", ipa: "/teɪk kɛr ʌv/" },
+  { en: "milk", pos: "n.", zh: "奶", ipa: "/mɪlk/" },
+  { en: "useful", pos: "adj.", zh: "有用的", ipa: "/ˈjusfəl/" },
+  { en: "smell", pos: "v.", zh: "聞", ipa: "/smɛl/" },
+  { en: "pick up", pos: "片語", zh: "撿起", ipa: "/pɪk ʌp/" },
+  { en: "suck up", pos: "片語", zh: "吸入", ipa: "/sʌk ʌp/" },
+  { en: "straw", pos: "n.", zh: "吸管", ipa: "/strɔ/" },
+  { en: "back and forth", pos: "片語", zh: "來回地", ipa: "/bæk ænd fɔrθ/" },
+  { en: "cool down", pos: "片語", zh: "降溫", ipa: "/kul daʊn/" },
+  { en: "blood vessel", pos: "n.", zh: "血管", ipa: "/blʌd ˈvɛsəl/" },
+  { en: "amazing", pos: "adj.", zh: "令人驚奇的", ipa: "/əˈmeɪzɪŋ/" },
+  { en: "land", pos: "n.", zh: "陸地", ipa: "/lænd/" },
+  { en: "hot weather", pos: "n.", zh: "炎熱的天氣", ipa: "/hɑt ˈwɛðər/" },
+  { en: "say hello", pos: "片語", zh: "打招呼", ipa: "/seɪ həˈloʊ/" },
+];
+
+const quizData = [
+  {
+    q: "From the reading, what do baby elephants drink from their mothers?",
+    options: ["Water.", "Milk.", "Leaves.", "Fresh air."],
+    answer: 1,
+    explanation: "文章提到：baby elephants drink milk from their mothers.（小象喝母象的奶）所以答案是 B. Milk。"
+  },
+  {
+    q: "From the reading, how do elephants use their trunks when they drink water?",
+    options: [
+      "They drink through their trunks like straws.",
+      "They use their trunks to suck up water and put it into their mouths.",
+      "They use their trunks to blow water into the air only.",
+      "They do not use their trunks when they drink water."
+    ],
+    answer: 1,
+    explanation: "文章說：it uses its trunk to suck up water first. Then it puts the water into its mouth. 所以答案是 B。注意：大象不像用吸管那樣直接用象鼻吸水喝！"
+  },
+  {
+    q: "What does the word \"This\" mean from the reading?",
+    options: [
+      "Elephants move their ears back and forth.",
+      "Elephants drink water with their mouths.",
+      "Elephants take care of their babies for many years.",
+      "Elephants use their trunks to pick up food."
+    ],
+    answer: 0,
+    explanation: "「This」指的是前一句話「elephants move their ears back and forth」這件事幫助牠們降溫。所以答案是 A。"
+  },
+  {
+    q: "Why do elephants move their ears in hot weather?",
+    options: [
+      "Because they want to hear better.",
+      "Because they want to scare other animals.",
+      "Because they want to help their bodies cool down.",
+      "Because they want to sleep deeply."
+    ],
+    answer: 2,
+    explanation: "文章提到：This helps them cool down, because their ears have many blood vessels. 所以答案是 C。"
+  },
+  {
+    q: "From the reading, which one is NOT true?",
+    options: [
+      "Elephants have long trunks.",
+      "Baby elephants drink milk from their mothers.",
+      "Elephants drink water through their trunks like straws.",
+      "Elephants can use their ears to help them stay cool."
+    ],
+    answer: 2,
+    explanation: "文章明確說「elephants do not drink through their trunks like we drink through a straw」，所以 C 是錯誤的答案。"
+  }
+];
+
+const matchingPairs = [
+  { en: "elephant", zh: "大象" },
+  { en: "trunk", zh: "象鼻" },
+  { en: "take care of", zh: "照顧" },
+  { en: "suck up", zh: "吸入" },
+  { en: "cool down", zh: "降溫" },
+  { en: "blood vessel", zh: "血管" },
+  { en: "back and forth", zh: "來回地" },
+  { en: "amazing", zh: "令人驚奇的" },
+];
+
+// ===== STATE =====
+let currentSection = 'reading';
+let quizAnswered = [false, false, false, false, false];
+let quizScore = 0;
+let selectedMatch = null;
+let matchedCount = 0;
+let gameTimerInterval = null;
+let gameSeconds = 0;
+let listeningAnswered = [false, false, false, false];
+let listeningScore = 0;
+
+// ===== TTS =====
+function speak(text, lang = 'en-US') {
+  if (!('speechSynthesis' in window)) {
+    alert('您的瀏覽器不支援語音功能，請使用 Chrome 或 Edge。');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  utterance.rate = 0.85;
+  utterance.pitch = 1.0;
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google'))
+    || voices.find(v => v.lang.startsWith('en-US'))
+    || voices.find(v => v.lang.startsWith('en'));
+  if (preferred) utterance.voice = preferred;
+  window.speechSynthesis.speak(utterance);
+}
+
+function speakWord(word) {
+  speak(word, 'en-US');
+}
+
+function speakPassage() {
+  const text = `Elephants are very big animals on land. They have large bodies, big ears, and long trunks. Mother elephants take care of their babies for many years, and baby elephants drink milk from their mothers. An elephant's trunk is very useful. Elephants use their trunks to smell, drink water, pick up food, and even say hello to other elephants. When an elephant wants to drink, it uses its trunk to suck up water first. Then it puts the water into its mouth. But elephants do not drink through their trunks like we drink through a straw. Elephants also use their big ears in a special way. In hot weather, elephants move their ears back and forth. This helps them cool down, because their ears have many blood vessels. When the wind moves over their ears, their bodies can become cooler. Elephants are amazing animals. They use their trunks in many ways, take care of their babies, and use their ears to help them stay cool. We can learn many fun and interesting things about elephants.`;
+  speak(text, 'en-US');
+}
+
+// ===== NAVIGATION =====
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  currentSection = id;
+  updateProgress();
+  if (id === 'game' && !gameTimerInterval) initMatchingGame();
+}
+
+function updateProgress() {
+  let p = 0;
+  if (currentSection === 'reading') p = 16;
+  if (currentSection === 'vocab') p = 33;
+  if (currentSection === 'grammar') p = 50;
+  if (currentSection === 'quiz') p = 66;
+  if (currentSection === 'game') p = 83;
+  if (currentSection === 'fun') p = 100;
+  document.getElementById('progressFill').style.width = p + '%';
+}
+
+// ===== VOCABULARY =====
+function initVocab() {
+  const grid = document.getElementById('vocabGrid');
+  grid.innerHTML = vocabulary.map(v => `
+    <div class="vocab-card" onclick="speak('${v.en.replace(/'/g, "\\'")}')">
+      <button class="play-btn" onclick="event.stopPropagation(); speak('${v.en.replace(/'/g, "\\'")}')">🔊</button>
+      <div class="en">${v.en}</div>
+      <div class="pos">${v.pos} &nbsp;${v.ipa}</div>
+      <div class="zh">${v.zh}</div>
+    </div>
+  `).join('');
+}
+
+// ===== LISTENING QUIZ =====
+function initListeningQuiz() {
+  const container = document.getElementById('listeningQuiz');
+  const questions = [
+    { word: "trunk", correct: "象鼻", options: ["象鼻", "耳朵", "尾巴", "吸管"] },
+    { word: "cool down", correct: "降溫", options: ["升溫", "降價", "降溫", "冷靜"] },
+    { word: "blood vessels", correct: "血管", options: ["神經", "血管", "肌肉", "骨頭"] },
+    { word: "take care of", correct: "照顧", options: ["照顧", "離開", "忘記", "尋找"] },
+  ];
+  container.innerHTML = questions.map((q, i) => `
+    <div class="quiz-question" id="lq-${i}" style="margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <button class="speak-btn" style="padding:8px 16px;" onclick="speak('${q.word.replace(/'/g, "\\'")}')">🔊 聽發音</button>
+        <span style="color:rgba(255,255,255,0.45);">第 ${i+1} 題</span>
+      </div>
+      <div class="options">
+        ${q.options.map((opt, j) => `
+          <div class="option" onclick="checkListening(${i}, '${opt}', '${q.correct}', this)">
+            <span class="option-letter">${String.fromCharCode(65+j)}</span>
+            <span>${opt}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="q-explanation" id="lq-exp-${i}"></div>
+    </div>
+  `).join('');
+}
+
+function checkListening(idx, selected, correct, el) {
+  if (listeningAnswered[idx]) return;
+  listeningAnswered[idx] = true;
+  const container = document.getElementById('lq-' + idx);
+  const options = container.querySelectorAll('.option');
+  const exp = document.getElementById('lq-exp-' + idx);
+  options.forEach(o => o.classList.add('disabled'));
+  if (selected === correct) {
+    el.classList.add('correct-answer');
+    container.classList.add('correct');
+    exp.textContent = '✅ 答對了！' + correct + ' 是正確的！';
+    exp.style.borderLeftColor = 'var(--grass-green)';
+    listeningScore++;
+  } else {
+    el.classList.add('wrong-answer');
+    container.classList.add('wrong');
+    options.forEach(o => { if (o.textContent.trim().includes(correct)) o.classList.add('correct-answer'); });
+    exp.textContent = '❌ 答錯了！正確答案是：' + correct;
+    exp.style.borderLeftColor = 'var(--coral)';
+  }
+  exp.classList.add('show');
+}
+
+// ===== QUIZ =====
+function initQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = quizData.map((q, i) => `
+    <div class="quiz-question" id="q-${i}">
+      <div class="q-text"><span class="q-number">${i + 1}</span>${q.q}</div>
+      <div class="options">
+        ${q.options.map((opt, j) => `
+          <div class="option" onclick="checkAnswer(${i}, ${j}, this)">
+            <span class="option-letter">${String.fromCharCode(65 + j)}</span>
+            <span>${opt}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="q-explanation" id="exp-${i}">${q.explanation}</div>
+    </div>
+  `).join('');
+}
+
+function checkAnswer(qIdx, optIdx, el) {
+  if (quizAnswered[qIdx]) return;
+  quizAnswered[qIdx] = true;
+  const container = document.getElementById('q-' + qIdx);
+  const options = container.querySelectorAll('.option');
+  const exp = document.getElementById('exp-' + qIdx);
+  options.forEach(o => o.classList.add('disabled'));
+  if (optIdx === quizData[qIdx].answer) {
+    el.classList.add('correct-answer');
+    container.classList.add('correct');
+    quizScore++;
+  } else {
+    el.classList.add('wrong-answer');
+    container.classList.add('wrong');
+    options[quizData[qIdx].answer].classList.add('correct-answer');
+  }
+  exp.classList.add('show');
+  if (quizAnswered.every(a => a)) setTimeout(showScore, 800);
+}
+
+function showScore() {
+  const scoreCard = document.getElementById('scoreCard');
+  scoreCard.style.display = 'block';
+  const pct = Math.round((quizScore / 5) * 100);
+  document.getElementById('scoreNumber').textContent = quizScore + '/5';
+  const deg = (quizScore / 5) * 360;
+  document.getElementById('scoreCircle').style.setProperty('--score-deg', deg + 'deg');
+  let stars = '', msg = '';
+  if (quizScore === 5) { stars = '⭐⭐⭐⭐⭐'; msg = '🏆 太厲害了！滿分！你是大象專家！'; }
+  else if (quizScore >= 4) { stars = '⭐⭐⭐⭐'; msg = '👏 很棒！幾乎全對！'; }
+  else if (quizScore >= 3) { stars = '⭐⭐⭐'; msg = '👍 不錯喔！繼續加油！'; }
+  else if (quizScore >= 2) { stars = '⭐⭐'; msg = '💪 再多讀幾次文章吧！'; }
+  else { stars = '⭐'; msg = '📖 再讀一次文章，你可以做得更好！'; }
+  document.getElementById('starDisplay').textContent = stars;
+  document.getElementById('scoreMessage').textContent = msg;
+  if (quizScore >= 4) fireConfetti();
+  scoreCard.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  quizAnswered = [false, false, false, false, false];
+  quizScore = 0;
+  document.getElementById('scoreCard').style.display = 'none';
+  initQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== MATCHING GAME =====
+function initMatchingGame() {
+  selectedMatch = null;
+  matchedCount = 0;
+  gameSeconds = 0;
+  document.getElementById('matchResult').style.display = 'none';
+  document.getElementById('matchCount').textContent = '0';
+  if (gameTimerInterval) clearInterval(gameTimerInterval);
+  gameTimerInterval = setInterval(() => { gameSeconds++; document.getElementById('gameTimer').textContent = gameSeconds; }, 1000);
+  const shuffledEn = [...matchingPairs].sort(() => Math.random() - 0.5);
+  const shuffledZh = [...matchingPairs].sort(() => Math.random() - 0.5);
+  const container = document.getElementById('matchingGame');
+  container.innerHTML = '';
+  const leftCol = document.createElement('div');
+  leftCol.style.cssText = 'display:flex;flex-direction:column;gap:10px;';
+  shuffledEn.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'match-item';
+    div.dataset.type = 'en';
+    div.dataset.word = p.en;
+    div.dataset.pairZh = p.zh;
+    div.textContent = p.en;
+    div.onclick = () => handleMatchClick(div);
+    leftCol.appendChild(div);
+  });
+  const rightCol = document.createElement('div');
+  rightCol.style.cssText = 'display:flex;flex-direction:column;gap:10px;';
+  shuffledZh.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'match-item';
+    div.dataset.type = 'zh';
+    div.dataset.word = p.zh;
+    div.dataset.pairEn = p.en;
+    div.textContent = p.zh;
+    div.onclick = () => handleMatchClick(div);
+    rightCol.appendChild(div);
+  });
+  container.appendChild(leftCol);
+  container.appendChild(rightCol);
+}
+
+function handleMatchClick(el) {
+  if (el.classList.contains('matched')) return;
+  if (!selectedMatch) {
+    selectedMatch = el;
+    el.classList.add('selected');
+  } else if (selectedMatch === el) {
+    el.classList.remove('selected');
+    selectedMatch = null;
+  } else {
+    const first = selectedMatch, second = el;
+    if (first.dataset.type === second.dataset.type) {
+      first.classList.remove('selected');
+      second.classList.add('selected');
+      selectedMatch = second;
+      return;
+    }
+    let isMatch = false;
+    if (first.dataset.type === 'en' && second.dataset.type === 'zh') {
+      isMatch = first.dataset.pairZh === second.dataset.word;
+    } else {
+      isMatch = first.word === second.dataset.pairEn;
+    }
+    if (isMatch) {
+      first.classList.remove('selected');
+      first.classList.add('matched');
+      second.classList.add('matched');
+      matchedCount++;
+      document.getElementById('matchCount').textContent = matchedCount;
+      selectedMatch = null;
+      if (matchedCount === matchingPairs.length) {
+        clearInterval(gameTimerInterval);
+        gameTimerInterval = null;
+        document.getElementById('finalTime').textContent = gameSeconds;
+        document.getElementById('matchResult').style.display = 'block';
+        fireConfetti();
+      }
+    } else {
+      first.classList.add('wrong-match');
+      second.classList.add('wrong-match');
+      setTimeout(() => {
+        first.classList.remove('selected', 'wrong-match');
+        second.classList.remove('wrong-match');
+        selectedMatch = null;
+      }, 500);
+    }
+  }
+}
+
+// ===== CONFETTI =====
+function fireConfetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#e8834a', '#f0c040', '#6db86d', '#a855f7', '#ffe08a', '#ff9090', '#c084fc'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 1.5 + 's';
+    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    container.appendChild(piece);
+    setTimeout(() => piece.remove(), 4000);
+  }
+}
+
+// ===== GRASS PARTICLES =====
+function createGrass() {
+  const savanna = document.getElementById('savannaBg');
+  for (let i = 0; i < 30; i++) {
+    const g = document.createElement('div');
+    g.className = 'grass-particle';
+    g.style.left = Math.random() * 100 + '%';
+    g.style.height = (15 + Math.random() * 30) + 'px';
+    g.style.animationDuration = (4 + Math.random() * 6) + 's';
+    g.style.animationDelay = Math.random() * 5 + 's';
+    savanna.appendChild(g);
+  }
+}
+
+// ===== INIT =====
+window.addEventListener('load', () => {
+  createGrass();
+  initVocab();
+  initListeningQuiz();
+  initQuiz();
+  updateProgress();
+  if ('speechSynthesis' in window) window.speechSynthesis.getVoices();
+});
+</script>
+</body>
+</html>
