@@ -222,6 +222,7 @@
     <button class="cat-btn" data-filter="images">圖片</button>
     <button class="cat-btn" data-filter="music">音樂</button>
     <button class="cat-btn" data-filter="video">影片</button>
+    <a href="english-learning/" class="cat-btn" style="text-decoration:none;display:inline-flex;align-items:center;">🎓 英文教材</a>
   </nav>
 
   <main class="gallery">
@@ -281,6 +282,24 @@
         <!-- Populated by JS -->
       </div>
     </section>
+
+    <!-- English Learning Section -->
+    <section class="section" data-category="english">
+      <h2 class="section-title">🎓 英文互動教材</h2>
+      <div class="grid">
+        <a href="english-learning/" class="card" style="text-decoration:none;color:inherit;">
+          <div style="padding:40px;text-align:center;font-size:4rem;">🐋</div>
+          <div class="card-body">
+            <h3 class="card-title">鯨魚英文閱讀大冒險</h3>
+            <div class="card-meta">
+              <span class="card-tag">互動學習</span>
+              <span>2026-05-15</span>
+            </div>
+            <p style="margin-top:10px;font-size:0.85rem;color:var(--text-secondary);line-height:1.5;">閱讀文章、單字學習、文法重點、閱讀測驗、配對遊戲、趣味知識，六大互動功能！</p>
+          </div>
+        </a>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -305,7 +324,7 @@
         sections.forEach(sec => {
           const cat = sec.dataset.category;
           if (filter === 'all') {
-            sec.classList.toggle('hidden', cat !== 'images');
+            sec.classList.toggle('hidden', cat !== 'images' && cat !== 'english');
           } else {
             sec.classList.toggle('hidden', cat !== filter);
           }
