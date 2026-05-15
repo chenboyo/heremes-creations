@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎓 英文互動學習教材 | English Interactive Learning</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Nunito', 'Noto Sans TC', sans-serif;
+    background: #0a1628;
+    color: #e8f4f8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+  .container { max-width: 700px; width: 100%; text-align: center; }
+  h1 {
+    font-size: 2.2em;
+    font-weight: 900;
+    background: linear-gradient(135deg, #66ffdd, #00d4aa, #ffd93d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .subtitle { font-size: 1.1em; color: rgba(255,255,255,0.5); margin-bottom: 40px; }
+  .card {
+    display: block;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    text-align: left;
+  }
+  .card:hover {
+    background: rgba(0,212,170,0.1);
+    border-color: #00d4aa;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,212,170,0.15);
+  }
+  .card .icon { font-size: 2.2em; margin-bottom: 10px; display: block; }
+  .card h2 { font-size: 1.3em; font-weight: 800; color: #66ffdd; margin-bottom: 6px; }
+  .card p { color: rgba(255,255,255,0.6); line-height: 1.5; font-size: 0.95em; }
+  .card .tag {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 12px;
+    border-radius: 50px;
+    background: rgba(0,212,170,0.15);
+    color: #00d4aa;
+    font-size: 0.8em;
+    font-weight: 700;
+  }
+  .footer { margin-top: 40px; color: rgba(255,255,255,0.25); font-size: 0.85em; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎓 英文互動學習教材</h1>
+  <p class="subtitle">English Interactive Learning Materials — 邊玩邊學，輕鬆進步！</p>
+
+  <a href="whale-reading-fun.html" class="card">
+    <span class="icon">🐋</span>
+    <h2>鯨魚英文閱讀大冒險</h2>
+    <p>Whale Reading Adventure — 閱讀文章、單字學習、文法重點、閱讀測驗、配對遊戲、趣味知識，六大互動功能一次滿足！</p>
+    <span class="tag">📖 閱讀測驗</span>
+    <span class="tag">🎮 互動遊戲</span>
+    <span class="tag">🔊 語音朗讀</span>
+  </a>
+
+  <div style="color: rgba(255,255,255,0.2); margin-top: 20px; font-size: 0.9em;">
+    📌 更多教材持續新增中⋯⋯
+  </div>
+
+  <div class="footer">
+    <a href="../" style="color:rgba(255,255,255,0.3);text-decoration:none;">← 返回 heremes-creations 首頁</a>
+  </div>
+</div>
+</body>
+</html>

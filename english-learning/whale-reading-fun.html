@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐋 鯨魚英文閱讀大冒險 | Whale Reading Adventure</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --ocean-deep: #0a1628;
+    --ocean-mid: #0d2847;
+    --ocean-light: #1a4a7a;
+    --seafoam: #00d4aa;
+    --seafoam-light: #66ffdd;
+    --coral: #ff6b6b;
+    --coral-light: #ff9999;
+    --sunny: #ffd93d;
+    --sunny-light: #ffe680;
+    --purple: #a855f7;
+    --purple-light: #c084fc;
+    --white: #ffffff;
+    --off-white: #e8f4f8;
+    --bubble: rgba(255,255,255,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', 'Noto Sans TC', sans-serif;
+    background: var(--ocean-deep);
+    color: var(--off-white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== ANIMATED OCEAN BACKGROUND ===== */
+  .ocean-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .bubble {
+    position: absolute;
+    bottom: -60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), rgba(255,255,255,0.03));
+    border: 1px solid rgba(255,255,255,0.08);
+    animation: rise linear infinite;
+  }
+
+  @keyframes rise {
+    0% { transform: translateY(0) scale(1); opacity: 0.6; }
+    50% { opacity: 0.8; }
+    100% { transform: translateY(-110vh) scale(0.5); opacity: 0; }
+  }
+
+  .wave {
+    position: absolute;
+    bottom: 0;
+    width: 200%;
+    height: 120px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='%2300d4aa' fill-opacity='0.05' d='M0,60 C360,120 720,0 1080,60 C1260,90 1380,30 1440,60 L1440,120 L0,120 Z'/%3E%3C/svg%3E") repeat-x;
+    animation: wave 8s linear infinite;
+  }
+
+  .wave:nth-child(2) {
+    bottom: 10px;
+    opacity: 0.5;
+    animation: wave 12s linear infinite reverse;
+  }
+
+  @keyframes wave {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ===== MAIN CONTAINER ===== */
+  .app-container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    text-align: center;
+    padding: 40px 20px 30px;
+  }
+
+  .header h1 {
+    font-size: 2.4em;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--seafoam-light), var(--seafoam), var(--sunny));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    text-shadow: none;
+  }
+
+  .header .subtitle {
+    font-size: 1.1em;
+    color: rgba(255,255,255,0.6);
+    font-weight: 500;
+  }
+
+  .whale-emoji {
+    font-size: 3em;
+    display: block;
+    margin-bottom: 10px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  /* ===== NAVIGATION TABS ===== */
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nav-tab {
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 2px solid rgba(0,212,170,0.3);
+    background: transparent;
+    color: var(--seafoam);
+    font-family: inherit;
+    font-size: 0.95em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .nav-tab:hover {
+    background: rgba(0,212,170,0.1);
+    border-color: var(--seafoam);
+    transform: translateY(-2px);
+  }
+
+  .nav-tab.active {
+    background: var(--seafoam);
+    color: var(--ocean-deep);
+    border-color: var(--seafoam);
+    box-shadow: 0 4px 20px rgba(0,212,170,0.3);
+  }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .section.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--bubble);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--seafoam), var(--purple), var(--coral));
+  }
+
+  .card-title {
+    font-size: 1.4em;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-title .icon {
+    font-size: 1.3em;
+  }
+
+  /* ===== READING PASSAGE ===== */
+  .passage {
+    font-size: 1.15em;
+    line-height: 1.9;
+    color: var(--off-white);
+  }
+
+  .passage p {
+    margin-bottom: 16px;
+  }
+
+  .highlight-word {
+    position: relative;
+    cursor: pointer;
+    color: var(--seafoam-light);
+    font-weight: 700;
+    border-bottom: 2px dashed rgba(0,212,170,0.4);
+    transition: all 0.2s;
+  }
+
+  .highlight-word:hover {
+    color: var(--sunny);
+    border-bottom-color: var(--sunny);
+  }
+
+  .highlight-word .tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ocean-mid);
+    border: 1px solid var(--seafoam);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 0.85em;
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .highlight-word .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--seafoam);
+  }
+
+  .highlight-word:hover .tooltip {
+    display: block;
+    animation: tooltipIn 0.2s ease;
+  }
+
+  @keyframes tooltipIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(5px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  /* ===== VOCABULARY SECTION ===== */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  .vocab-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vocab-card:hover {
+    background: rgba(0,212,170,0.1);
+    border-color: var(--seafoam);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,212,170,0.15);
+  }
+
+  .vocab-card .en {
+    font-size: 1.2em;
+    font-weight: 800;
+    color: var(--seafoam-light);
+    margin-bottom: 4px;
+  }
+
+  .vocab-card .pos {
+    font-size: 0.8em;
+    color: var(--purple-light);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .vocab-card .zh {
+    font-size: 0.95em;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .vocab-card .play-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0,212,170,0.2);
+    border: none;
+    color: var(--seafoam);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    transition: all 0.2s;
+  }
+
+  .vocab-card .play-btn:hover {
+    background: var(--seafoam);
+    color: var(--ocean-deep);
+  }
+
+  /* ===== QUIZ SECTION ===== */
+  .quiz-question {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .quiz-question.answered {
+    pointer-events: none;
+  }
+
+  .quiz-question.correct {
+    border-color: var(--seafoam);
+    background: rgba(0,212,170,0.08);
+  }
+
+  .quiz-question.wrong {
+    border-color: var(--coral);
+    background: rgba(255,107,107,0.08);
+  }
+
+  .q-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--seafoam), var(--purple));
+    color: var(--white);
+    font-weight: 800;
+    font-size: 0.95em;
+    margin-right: 10px;
+  }
+
+  .q-text {
+    font-size: 1.05em;
+    font-weight: 600;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1em;
+  }
+
+  .option:hover:not(.disabled) {
+    border-color: var(--seafoam);
+    background: rgba(0,212,170,0.08);
+    transform: translateX(5px);
+  }
+
+  .option.selected {
+    border-color: var(--seafoam);
+    background: rgba(0,212,170,0.15);
+  }
+
+  .option.correct-answer {
+    border-color: var(--seafoam) !important;
+    background: rgba(0,212,170,0.2) !important;
+  }
+
+  .option.wrong-answer {
+    border-color: var(--coral) !important;
+    background: rgba(255,107,107,0.15) !important;
+  }
+
+  .option.disabled {
+    cursor: default;
+  }
+
+  .option-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    font-weight: 700;
+    font-size: 0.9em;
+    flex-shrink: 0;
+  }
+
+  .q-explanation {
+    margin-top: 14px;
+    padding: 14px 18px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 12px;
+    font-size: 0.95em;
+    line-height: 1.6;
+    display: none;
+    border-left: 3px solid var(--seafoam);
+  }
+
+  .q-explanation.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* ===== SCORE DISPLAY ===== */
+  .score-display {
+    text-align: center;
+    padding: 30px;
+  }
+
+  .score-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: conic-gradient(var(--seafoam) var(--score-deg), rgba(255,255,255,0.05) 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    position: relative;
+  }
+
+  .score-circle::before {
+    content: '';
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: var(--ocean-deep);
+  }
+
+  .score-number {
+    position: relative;
+    z-index: 1;
+    font-size: 2.5em;
+    font-weight: 900;
+    color: var(--seafoam-light);
+  }
+
+  .score-message {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--sunny);
+  }
+
+  /* ===== FUN FACTS ===== */
+  .fun-fact {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 18px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: all 0.3s ease;
+  }
+
+  .fun-fact:hover {
+    background: rgba(168,85,247,0.08);
+    border-color: rgba(168,85,247,0.2);
+    transform: translateX(5px);
+  }
+
+  .fun-fact .fact-icon {
+    font-size: 2em;
+    flex-shrink: 0;
+  }
+
+  .fun-fact .fact-text {
+    font-size: 1em;
+    line-height: 1.6;
+  }
+
+  .fun-fact .fact-text strong {
+    color: var(--purple-light);
+  }
+
+  /* ===== PRONUNCIATION GUIDE ===== */
+  .speak-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 2px solid var(--seafoam);
+    background: transparent;
+    color: var(--seafoam);
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 4px;
+  }
+
+  .speak-btn:hover {
+    background: var(--seafoam);
+    color: var(--ocean-deep);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,212,170,0.3);
+  }
+
+  .speak-btn.big {
+    padding: 16px 32px;
+    font-size: 1.15em;
+  }
+
+  /* ===== PROGRESS BAR ===== */
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--seafoam), var(--purple));
+    border-radius: 10px;
+    transition: width 0.5s ease;
+  }
+
+  /* ===== GRAMMAR SECTION ===== */
+  .grammar-box {
+    background: rgba(168,85,247,0.08);
+    border: 1px solid rgba(168,85,247,0.2);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 14px;
+  }
+
+  .grammar-box h4 {
+    color: var(--purple-light);
+    font-size: 1.1em;
+    margin-bottom: 10px;
+  }
+
+  .grammar-box p {
+    line-height: 1.7;
+    color: rgba(255,255,255,0.8);
+  }
+
+  .grammar-box .example {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    font-style: italic;
+  }
+
+  .grammar-box .example .en {
+    color: var(--seafoam-light);
+    font-weight: 600;
+  }
+
+  .grammar-box .example .zh {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.9em;
+  }
+
+  /* ===== MATCHING GAME ===== */
+  .matching-game {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .match-item {
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    cursor: pointer;
+    text-align: center;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.95em;
+  }
+
+  .match-item:hover {
+    border-color: var(--seafoam);
+    transform: scale(1.02);
+  }
+
+  .match-item.selected {
+    border-color: var(--sunny);
+    background: rgba(255,217,61,0.1);
+  }
+
+  .match-item.matched {
+    border-color: var(--seafoam);
+    background: rgba(0,212,170,0.15);
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  .match-item.wrong-match {
+    animation: shake 0.5s ease;
+    border-color: var(--coral);
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+
+  /* ===== CONFETTI ===== */
+  .confetti-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    animation: confettiFall 3s ease-out forwards;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    .header h1 { font-size: 1.6em; }
+    .card { padding: 22px; }
+    .vocab-grid { grid-template-columns: 1fr; }
+    .matching-game { grid-template-columns: 1fr; }
+    .nav-tab { padding: 8px 14px; font-size: 0.85em; }
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--ocean-deep); }
+  ::-webkit-scrollbar-thumb { background: var(--ocean-light); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--seafoam); }
+
+  /* ===== TTS SPEAKING INDICATOR ===== */
+  .speaking-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 8px;
+  }
+
+  .speaking-indicator span {
+    width: 4px;
+    height: 16px;
+    background: var(--seafoam);
+    border-radius: 2px;
+    animation: soundBar 0.6s ease-in-out infinite;
+  }
+
+  .speaking-indicator span:nth-child(2) { animation-delay: 0.15s; }
+  .speaking-indicator span:nth-child(3) { animation-delay: 0.3s; }
+  .speaking-indicator span:nth-child(4) { animation-delay: 0.45s; }
+
+  @keyframes soundBar {
+    0%, 100% { height: 6px; }
+    50% { height: 20px; }
+  }
+
+  /* ===== STAR RATING ===== */
+  .stars { font-size: 2em; letter-spacing: 4px; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 30px;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.9em;
+  }
+</style>
+</head>
+<body>
+
+<!-- Ocean Background -->
+<div class="ocean-bg" id="oceanBg">
+  <div class="wave"></div>
+  <div class="wave"></div>
+</div>
+
+<!-- Confetti -->
+<div class="confetti-container" id="confettiContainer"></div>
+
+<div class="app-container">
+  <!-- Header -->
+  <header class="header">
+    <span class="whale-emoji">🐋</span>
+    <h1>鯨魚英文閱讀大冒險</h1>
+    <p class="subtitle">Whale Reading Adventure — 邊玩邊學，輕鬆閱讀！</p>
+  </header>
+
+  <!-- Progress -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('reading', this)">📖 閱讀文章</button>
+    <button class="nav-tab" onclick="showSection('vocab', this)">📝 單字學習</button>
+    <button class="nav-tab" onclick="showSection('grammar', this)">🔤 文法重點</button>
+    <button class="nav-tab" onclick="showSection('quiz', this)">🎯 閱讀測驗</button>
+    <button class="nav-tab" onclick="showSection('game', this)">🎮 配對遊戲</button>
+    <button class="nav-tab" onclick="showSection('fun', this)">💡 趣味知識</button>
+  </nav>
+
+  <!-- ===== SECTION: READING ===== -->
+  <div class="section active" id="section-reading">
+    <div class="card">
+      <div class="card-title"><span class="icon">📖</span> 閱讀文章 Reading Passage</div>
+      <button class="speak-btn big" onclick="speakPassage()">🔊 朗讀全文 (Listen to Passage)</button>
+
+      <div class="passage" id="passage" style="margin-top: 20px;">
+        <p>
+          Whales are
+          <span class="highlight-word" onclick="speakWord('big')">big<span class="tooltip">大的 (adj.)</span></span>
+          animals in the
+          <span class="highlight-word" onclick="speakWord('sea')">sea<span class="tooltip">海洋 (n.)</span></span>.
+          They have
+          <span class="highlight-word" onclick="speakWord('large')">large<span class="tooltip">大的 (adj.)</span></span>
+          bodies and long
+          <span class="highlight-word" onclick="speakWord('tails')">tails<span class="tooltip">尾巴 (n.)</span></span>, and
+          <span class="highlight-word" onclick="speakWord('mother')">mother<span class="tooltip">母親 (n.)</span></span>
+          whales
+          <span class="highlight-word" onclick="speakWord('feed')">feed<span class="tooltip">餵養 (v.)</span></span>
+          their
+          <span class="highlight-word" onclick="speakWord('babies')">babies<span class="tooltip">寶寶 (n.)</span></span>
+          with
+          <span class="highlight-word" onclick="speakWord('milk')">milk<span class="tooltip">奶 (n.)</span></span>.
+        </p>
+        <p>
+          But whales cannot
+          <span class="highlight-word" onclick="speakWord('breathe')">breathe<span class="tooltip">呼吸 (v.)</span></span>
+          in the water like
+          <span class="highlight-word" onclick="speakWord('fish')">fish<span class="tooltip">魚 (n.)</span></span>.
+          They must come to the
+          <span class="highlight-word" onclick="speakWord('top')">top<span class="tooltip">頂部 (n.)</span></span>
+          of the water and use their
+          <span class="highlight-word" onclick="speakWord('blowhole')">blowhole<span class="tooltip">噴水孔 (n.)</span></span>
+          to get
+          <span class="highlight-word" onclick="speakWord('fresh air')">fresh air<span class="tooltip">新鮮空氣 (n.)</span></span>
+          when they need it. After getting some fresh air, they go back into the water.
+        </p>
+        <p>
+          Because whales need to get fresh air
+          <span class="highlight-word" onclick="speakWord('every now and then')">every now and then<span class="tooltip">時不時地</span></span>,
+          they cannot
+          <span class="highlight-word" onclick="speakWord('sleep')">sleep<span class="tooltip">睡覺 (v.)</span></span>
+          <span class="highlight-word" onclick="speakWord('deeply')">deeply<span class="tooltip">深沉地 (adv.)</span></span>
+          in the water. So, they sleep in a
+          <span class="highlight-word" onclick="speakWord('special')">special<span class="tooltip">特別的 (adj.)</span></span>
+          way: Whales sleep with only
+          <span class="highlight-word" onclick="speakWord('half')">half<span class="tooltip">一半 (n.)</span></span>
+          of their
+          <span class="highlight-word" onclick="speakWord('brain')">brain<span class="tooltip">腦 (n.)</span></span>
+          at a time.
+          <span class="highlight-word" onclick="speakWord('This')">This<span class="tooltip">這（指前面整件事）</span></span>
+          helps them keep
+          <span class="highlight-word" onclick="speakWord('swimming')">swimming<span class="tooltip">游泳 (v.)</span></span>
+          slowly — and come up for air easily — during their sleeping hours. Cool, isn't it?
+        </p>
+        <p>
+          Whales are
+          <span class="highlight-word" onclick="speakWord('amazing')">amazing<span class="tooltip">令人驚奇的 (adj.)</span></span>
+          animals. They live in the sea, breathe in a special way, and use half of their brain when they sleep. We can learn many
+          <span class="highlight-word" onclick="speakWord('fun')">fun<span class="tooltip">有趣的 (adj.)</span></span>
+          and
+          <span class="highlight-word" onclick="speakWord('interesting')">interesting<span class="tooltip">有意思的 (adj.)</span></span>
+          things about whales.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🇹🇼</span> 中文翻譯</div>
+      <div class="passage" style="color: rgba(255,255,255,0.6); font-size: 1.05em;">
+        <p>鯨魚是海裡的大型動物。牠們有龐大的身體長長的尾巴，母鯨用奶餵養寶寶。但鯨魚不像魚一樣能在水裡呼吸。牠們需要浮到水面，用噴水孔來獲取新鮮空氣。吸完空氣後，再回到水裡。</p>
+        <p>因為鯨魚需要不時地呼吸新鮮空氣，所以牠們無法在水裡深度睡眠。鯨魚的睡眠方式很特別：一次只讓半邊大腦休息。這幫助牠們在睡覺時慢慢游泳，並且能輕鬆浮上水面換氣。很酷吧？</p>
+        <p>鯨魚是令人驚奇的動物。牠們住在海裡，用特別的方式呼吸，睡覺時只用半邊大腦。我們可以學到很多關於鯨魚的有趣知識。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: VOCABULARY ===== -->
+  <div class="section" id="section-vocab">
+    <div class="card">
+      <div class="card-title"><span class="icon">📝</span> 單字學習 Vocabulary <span style="font-size:0.7em; color:rgba(255,255,255,0.4); font-weight:400;">（點擊卡片聽發音）</span></div>
+      <div class="vocab-grid" id="vocabGrid"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🎧</span> 聽力練習 Listening Practice</div>
+      <p style="margin-bottom: 16px; color: rgba(255,255,255,0.7);">聽聽看，選出正確的中文意思：</p>
+      <div id="listeningQuiz"></div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: GRAMMAR ===== -->
+  <div class="section" id="section-grammar">
+    <div class="card">
+      <div class="card-title"><span class="icon">🔤</span> 文法重點 Grammar Focus</div>
+
+      <div class="grammar-box">
+        <h4>📌 1. 代名詞 "This" 的指代用法</h4>
+        <p>在文章中，「This helps them keep swimming slowly」的 <strong>This</strong> 指的是前面整句話「Whales sleep with only half of their brain at a time」。</p>
+        <div class="example">
+          <div class="en">This = 鯨魚一次只用半邊大腦睡覺（這件事）</div>
+          <div class="zh">This 可以指代前面提到的整個概念或事情</div>
+        </div>
+      </div>
+
+      <div class="grammar-box">
+        <h4>📌 2. "every now and then" 片語</h4>
+        <p>意思是「偶爾、時不時地」，表示某件事不是持續發生，而是偶爾發生。</p>
+        <div class="example">
+          <div class="en">Whales need to get fresh air every now and then.</div>
+          <div class="zh">鯨魚需要時不時地獲取新鮮空氣。</div>
+        </div>
+        <div class="example" style="margin-top:8px;">
+          <div class="en">I call my grandparents every now and then.</div>
+          <div class="zh">我偶爾會打電話給我的祖父母。</div>
+        </div>
+      </div>
+
+      <div class="grammar-box">
+        <h4>📌 3. "with + N" 的用法</h4>
+        <p>用「with + 名詞」來描述「用什麼方式／工具」。</p>
+        <div class="example">
+          <div class="en">Mother whales feed their babies with milk.</div>
+          <div class="zh">母鯨用奶餵養寶寶。</div>
+        </div>
+        <div class="example" style="margin-top:8px;">
+          <div class="en">They sleep with only half of their brain.</div>
+          <div class="zh">牠們只用半邊大腦睡覺。</div>
+        </div>
+      </div>
+
+      <div class="grammar-box">
+        <h4>📌 4. "cannot...like..." 比較句型</h4>
+        <p>用「cannot + V + like + N」表示「不像...一樣能...」。</p>
+        <div class="example">
+          <div class="en">Whales cannot breathe in the water like fish.</div>
+          <div class="zh">鯨魚不像魚一樣能在水裡呼吸。</div>
+        </div>
+      </div>
+
+      <div class="grammar-box">
+        <h4>📌 5. "help + 人 + (to) + 原形V" 結構</h4>
+        <p>help 後面可以直接接原形動詞（to 可加可不加）。</p>
+        <div class="example">
+          <div class="en">This helps them (to) keep swimming slowly.</div>
+          <div class="zh">這幫助牠們慢慢地繼續游泳。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: QUIZ ===== -->
+  <div class="section" id="section-quiz">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span> 閱讀測驗 Reading Comprehension Quiz</div>
+      <p style="color: rgba(255,255,255,0.5); margin-bottom: 20px;">共 5 題，測驗你對文章的理解程度！</p>
+      <div id="quizContainer"></div>
+    </div>
+
+    <div class="card" id="scoreCard" style="display:none;">
+      <div class="score-display">
+        <div class="score-circle" id="scoreCircle">
+          <span class="score-number" id="scoreNumber">0</span>
+        </div>
+        <div class="stars" id="starDisplay"></div>
+        <p class="score-message" id="scoreMessage"></p>
+        <button class="speak-btn" style="margin-top:20px;" onclick="resetQuiz()">🔄 再試一次</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: MATCHING GAME ===== -->
+  <div class="section" id="section-game">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎮</span> 配對遊戲 Matching Game</div>
+      <p style="color: rgba(255,255,255,0.6); margin-bottom: 16px;">將英文單字與正確的中文配對！點擊英文再點擊中文。</p>
+      <p style="margin-bottom: 16px;">⏱️ 時間：<span id="gameTimer" style="color:var(--sunny);font-weight:800;">0</span> 秒 | ✅ 已完成：<span id="matchCount" style="color:var(--seafoam);font-weight:800;">0</span>/8</p>
+      <div class="matching-game" id="matchingGame"></div>
+      <div id="matchResult" style="text-align:center; margin-top:20px; display:none;">
+        <p style="font-size:1.3em; font-weight:800; color:var(--sunny);">🎉 太厲害了！全部配對完成！</p>
+        <p style="color:rgba(255,255,255,0.6); margin-top:8px;">總共用時：<span id="finalTime" style="color:var(--seafoam);font-weight:700;"></span> 秒</p>
+        <button class="speak-btn" style="margin-top:16px;" onclick="initMatchingGame()">🔄 再玩一次</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: FUN FACTS ===== -->
+  <div class="section" id="section-fun">
+    <div class="card">
+      <div class="card-title"><span class="icon">💡</span> 鯨魚趣味小知識 Fun Facts About Whales</div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">🧠</span>
+        <div class="fact-text"><strong>半腦睡眠：</strong>鯨魚一次只讓半邊大腦睡覺，另一半保持清醒，這樣才能記得浮上水面呼吸！科學家叫這種睡眠方式叫 <strong>unihemispheric sleep</strong>（單半球睡眠）。</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">🐋</span>
+        <div class="fact-text"><strong>不是魚類：</strong>鯨魚雖然住在海裡，但牠們是<strong>哺乳類</strong>（mammals），和人類一樣用肺呼吸、喝母奶長大！</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">📏</span>
+        <div class="fact-text"><strong>世界最大動物：</strong>藍鯨（Blue Whale）是地球上最大的動物，體長可達 30 公尺，心臟大約有一輛汽車那麼大！</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">🎵</span>
+        <div class="fact-text"><strong>鯨魚會唱歌：</strong>座頭鯨（Humpback Whale）會發出複雜的歌聲，可以持續好幾個小時，而且每年都會換「新歌」！</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">💨</span>
+        <div class="fact-text"><strong>噴水孔不是水：</strong>鯨魚噴出來的「水柱」其實主要是體內的溫暖空氣遇到冷空氣凝結的水蒸氣，就像冬天哈氣一樣！</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">🌊</span>
+        <div class="fact-text"><strong>潛水高手：</strong>抹香鯨（Sperm Whale）可以潛到 2000 公尺深的水下，閉氣長達 90 分鐘！</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">👶</span>
+        <div class="fact-text"><strong>鯨寶寶好大隻：</strong>藍鯨寶寶出生時就有 7 公尺長、約 2.5 噸重，每天要喝大約 400 公升的母奶！</div>
+      </div>
+
+      <div class="fun-fact">
+        <span class="fact-icon">🗺️</span>
+        <div class="fact-text"><strong>超強導航：</strong>灰鯨（Gray Whale）每年遷徙超過 16,000 公里，是哺乳類中遷徙距離最長的動物之一！</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📚</span> 相關英文片語 Idioms with "Whale"</div>
+      <div class="fun-fact">
+        <span class="fact-icon">🐳</span>
+        <div class="fact-text"><strong>a whale of a time</strong> — 玩得非常開心<br><span style="color:rgba(255,255,255,0.5);">例：We had a whale of a time at the beach!（我們在海灘玩超開心的！）</span></div>
+      </div>
+      <div class="fun-fact">
+        <span class="fact-icon">🎣</span>
+        <div class="fact-text"><strong>to whale on someone</strong> — 狠揍某人（口語）<br><span style="color:rgba(255,255,255,0.5);">例：The big kid whaled on him.（那個大孩子狠揍了他一頓。）</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    🐋 鯨魚英文閱讀大冒險 — 讓學習變得有趣！
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const vocabulary = [
+  { en: "whale", pos: "n.", zh: "鯨魚", ipa: "/weɪl/" },
+  { en: "tail", pos: "n.", zh: "尾巴", ipa: "/teɪl/" },
+  { en: "feed", pos: "v.", zh: "餵養", ipa: "/fiːd/" },
+  { en: "milk", pos: "n.", zh: "奶", ipa: "/mɪlk/" },
+  { en: "breathe", pos: "v.", zh: "呼吸", ipa: "/briːð/" },
+  { en: "blowhole", pos: "n.", zh: "噴水孔", ipa: "/ˈbloʊhoʊl/" },
+  { en: "fresh air", pos: "n.", zh: "新鮮空氣", ipa: "/freʃ er/" },
+  { en: "deeply", pos: "adv.", zh: "深沉地", ipa: "/ˈdiːpli/" },
+  { en: "brain", pos: "n.", zh: "腦", ipa: "/breɪn/" },
+  { en: "half", pos: "n./adj.", zh: "一半", ipa: "/hæf/" },
+  { en: "swim", pos: "v.", zh: "游泳", ipa: "/swɪm/" },
+  { en: "amazing", pos: "adj.", zh: "令人驚奇的", ipa: "/əˈmeɪzɪŋ/" },
+  { en: "special", pos: "adj.", zh: "特別的", ipa: "/ˈspeʃəl/" },
+  { en: "every now and then", pos: "片語", zh: "時不時地", ipa: "/ˈɛvri naʊ ænd ðɛn/" },
+  { en: "sea", pos: "n.", zh: "海洋", ipa: "/siː/" },
+  { en: "fish", pos: "n.", zh: "魚", ipa: "/fɪʃ/" },
+];
+
+const quizData = [
+  {
+    q: "From the reading, what do mother whales give their babies?",
+    options: ["Tails.", "Milk.", "Fish.", "Fresh air."],
+    answer: 1,
+    explanation: "文章提到：mother whales feed their babies with milk.（母鯨用奶餵養寶寶）所以答案是 B. Milk。"
+  },
+  {
+    q: "From the reading, how do whales get fresh air?",
+    options: [
+      "They breathe like fish in the water, so they don't need fresh air.",
+      "They come to the top of the water and use their tails to get fresh air.",
+      "They use their mouths to drink water and get fresh air out.",
+      "They come to the top of the water and use their blowhole to get fresh air."
+    ],
+    answer: 3,
+    explanation: "文章說：They must come to the top of the water and use their blowhole to get fresh air. 所以答案是 D。"
+  },
+  {
+    q: "What does the word \"This\" mean from the reading?",
+    options: [
+      "Whales can sleep with only half of their brain.",
+      "Whales must come to the top of the water.",
+      "Whales cannot breathe in the water like fish.",
+      "Whales need to sleep near the top of the water."
+    ],
+    answer: 0,
+    explanation: "「This」指的是前一句話「Whales sleep with only half of their brain at a time.」這件事幫助牠們邊睡邊游泳。所以答案是 A。"
+  },
+  {
+    q: "Why can't a whale sleep deeply in the water?",
+    options: [
+      "Because they are always busy hunting for food.",
+      "Because they need to keep swimming to stay warm.",
+      "Because they need to feed their babies at night.",
+      "Because they need to come to the top of the water and breathe."
+    ],
+    answer: 3,
+    explanation: "文章提到：Because whales need to get fresh air every now and then, they cannot sleep deeply in the water. 所以答案是 D。"
+  },
+  {
+    q: "From the reading, which one is NOT true?",
+    options: [
+      "Whales can feed their babies with milk.",
+      "Whales sleep with only half of their brain at a time.",
+      "Whales are big animals on the island.",
+      "Whales cannot breathe like fish in the sea."
+    ],
+    answer: 2,
+    explanation: "文章說鯨魚是「in the sea」（在海裡），不是「on the island」（在島上）。所以 C 是錯誤的答案。"
+  }
+];
+
+const matchingPairs = [
+  { en: "whale", zh: "鯨魚" },
+  { en: "blowhole", zh: "噴水孔" },
+  { en: "breathe", zh: "呼吸" },
+  { en: "brain", zh: "腦" },
+  { en: "tail", zh: "尾巴" },
+  { en: "feed", zh: "餵養" },
+  { en: "amazing", zh: "令人驚奇的" },
+  { en: "every now and then", zh: "時不時地" },
+];
+
+// ===== STATE =====
+let currentSection = 'reading';
+let quizAnswered = [false, false, false, false, false];
+let quizScore = 0;
+let selectedMatch = null;
+let matchedCount = 0;
+let gameTimerInterval = null;
+let gameSeconds = 0;
+let listeningAnswered = [false, false, false, false];
+let listeningScore = 0;
+
+// ===== TTS =====
+function speak(text, lang = 'en-US') {
+  if (!('speechSynthesis' in window)) {
+    alert('您的瀏覽器不支援語音功能，請使用 Chrome 或 Edge。');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  utterance.rate = 0.85;
+  utterance.pitch = 1.0;
+
+  // Try to find a better voice
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google')) 
+    || voices.find(v => v.lang.startsWith('en-US'))
+    || voices.find(v => v.lang.startsWith('en'));
+  if (preferred) utterance.voice = preferred;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function speakWord(word) {
+  speak(word, 'en-US');
+}
+
+function speakPassage() {
+  const text = `Whales are big animals in the sea. They have large bodies and long tails, and mother whales feed their babies with milk. But whales cannot breathe in the water like fish. They must come to the top of the water and use their blowhole to get fresh air when they need it. After getting some fresh air, they go back into the water. Because whales need to get fresh air every now and then, they cannot sleep deeply in the water. So, they sleep in a special way: Whales sleep with only half of their brain at a time. This helps them keep swimming slowly and come up for air easily during their sleeping hours. Cool, isn't it? Whales are amazing animals. They live in the sea, breathe in a special way, and use half of their brain when they sleep. We can learn many fun and interesting things about whales.`;
+  speak(text, 'en-US');
+}
+
+// ===== NAVIGATION =====
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  currentSection = id;
+  updateProgress();
+
+  if (id === 'game' && !gameTimerInterval) {
+    initMatchingGame();
+  }
+}
+
+function updateProgress() {
+  let progress = 0;
+  if (currentSection === 'reading') progress = 16;
+  if (currentSection === 'vocab') progress = 33;
+  if (currentSection === 'grammar') progress = 50;
+  if (currentSection === 'quiz') progress = 66;
+  if (currentSection === 'game') progress = 83;
+  if (currentSection === 'fun') progress = 100;
+  document.getElementById('progressFill').style.width = progress + '%';
+}
+
+// ===== VOCABULARY =====
+function initVocab() {
+  const grid = document.getElementById('vocabGrid');
+  grid.innerHTML = vocabulary.map((v, i) => `
+    <div class="vocab-card" onclick="speak('${v.en.replace(/'/g, "\\'")}')">
+      <button class="play-btn" onclick="event.stopPropagation(); speak('${v.en.replace(/'/g, "\\'")}')">🔊</button>
+      <div class="en">${v.en}</div>
+      <div class="pos">${v.pos} &nbsp;${v.ipa}</div>
+      <div class="zh">${v.zh}</div>
+    </div>
+  `).join('');
+}
+
+// ===== LISTENING QUIZ =====
+function initListeningQuiz() {
+  const container = document.getElementById('listeningQuiz');
+  const questions = [
+    { word: "blowhole", correct: "噴水孔", options: ["尾巴", "噴水孔", "大腦", "奶"] },
+    { word: "breathe", correct: "呼吸", options: ["游泳", "睡覺", "呼吸", "餵養"] },
+    { word: "amazing", correct: "令人驚奇的", options: ["可怕的", "令人驚奇的", "普通的", "無聊的"] },
+    { word: "every now and then", correct: "時不時地", options: ["從不", "總是", "時不時地", "馬上"] },
+  ];
+
+  container.innerHTML = questions.map((q, i) => `
+    <div class="quiz-question" id="lq-${i}" style="margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <button class="speak-btn" style="padding:8px 16px;" onclick="speak('${q.word.replace(/'/g, "\\'")}')">🔊 聽發音</button>
+        <span style="color:rgba(255,255,255,0.5);">第 ${i+1} 題</span>
+      </div>
+      <div class="options">
+        ${q.options.map((opt, j) => `
+          <div class="option" onclick="checkListening(${i}, '${opt}', '${q.correct}', this)">
+            <span class="option-letter">${String.fromCharCode(65+j)}</span>
+            <span>${opt}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="q-explanation" id="lq-exp-${i}"></div>
+    </div>
+  `).join('');
+}
+
+function checkListening(idx, selected, correct, el) {
+  if (listeningAnswered[idx]) return;
+  listeningAnswered[idx] = true;
+
+  const container = document.getElementById('lq-' + idx);
+  const options = container.querySelectorAll('.option');
+  const exp = document.getElementById('lq-exp-' + idx);
+
+  options.forEach(o => o.classList.add('disabled'));
+
+  if (selected === correct) {
+    el.classList.add('correct-answer');
+    container.classList.add('correct');
+    exp.textContent = '✅ 答對了！' + correct + ' 是正確的！';
+    exp.style.borderLeftColor = 'var(--seafoam)';
+    listeningScore++;
+  } else {
+    el.classList.add('wrong-answer');
+    container.classList.add('wrong');
+    options.forEach(o => {
+      if (o.textContent.trim().includes(correct)) {
+        o.classList.add('correct-answer');
+      }
+    });
+    exp.textContent = '❌ 答錯了！正確答案是：' + correct;
+    exp.style.borderLeftColor = 'var(--coral)';
+  }
+  exp.classList.add('show');
+}
+
+// ===== QUIZ =====
+function initQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = quizData.map((q, i) => `
+    <div class="quiz-question" id="q-${i}">
+      <div class="q-text">
+        <span class="q-number">${i + 1}</span>
+        ${q.q}
+      </div>
+      <div class="options">
+        ${q.options.map((opt, j) => `
+          <div class="option" onclick="checkAnswer(${i}, ${j}, this)">
+            <span class="option-letter">${String.fromCharCode(65 + j)}</span>
+            <span>${opt}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="q-explanation" id="exp-${i}">${q.explanation}</div>
+    </div>
+  `).join('');
+}
+
+function checkAnswer(qIdx, optIdx, el) {
+  if (quizAnswered[qIdx]) return;
+  quizAnswered[qIdx] = true;
+
+  const container = document.getElementById('q-' + qIdx);
+  const options = container.querySelectorAll('.option');
+  const exp = document.getElementById('exp-' + qIdx);
+
+  options.forEach(o => o.classList.add('disabled'));
+
+  if (optIdx === quizData[qIdx].answer) {
+    el.classList.add('correct-answer');
+    container.classList.add('correct');
+    quizScore++;
+  } else {
+    el.classList.add('wrong-answer');
+    container.classList.add('wrong');
+    options[quizData[qIdx].answer].classList.add('correct-answer');
+  }
+
+  exp.classList.add('show');
+
+  // Check if all answered
+  if (quizAnswered.every(a => a)) {
+    setTimeout(showScore, 800);
+  }
+}
+
+function showScore() {
+  const scoreCard = document.getElementById('scoreCard');
+  scoreCard.style.display = 'block';
+
+  const pct = Math.round((quizScore / 5) * 100);
+  document.getElementById('scoreNumber').textContent = quizScore + '/5';
+
+  const deg = (quizScore / 5) * 360;
+  document.getElementById('scoreCircle').style.setProperty('--score-deg', deg + 'deg');
+
+  let stars = '';
+  let msg = '';
+  if (quizScore === 5) { stars = '⭐⭐⭐⭐⭐'; msg = '🏆 太厲害了！滿分！你是鯨魚專家！'; }
+  else if (quizScore >= 4) { stars = '⭐⭐⭐⭐'; msg = '👏 很棒！幾乎全對！'; }
+  else if (quizScore >= 3) { stars = '⭐⭐⭐'; msg = '👍 不錯喔！繼續加油！'; }
+  else if (quizScore >= 2) { stars = '⭐⭐'; msg = '💪 再多讀幾次文章吧！'; }
+  else { stars = '⭐'; msg = '📖 再讀一次文章，你可以做得更好！'; }
+
+  document.getElementById('starDisplay').textContent = stars;
+  document.getElementById('scoreMessage').textContent = msg;
+
+  if (quizScore >= 4) {
+    fireConfetti();
+  }
+
+  scoreCard.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  quizAnswered = [false, false, false, false, false];
+  quizScore = 0;
+  document.getElementById('scoreCard').style.display = 'none';
+  initQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== MATCHING GAME =====
+function initMatchingGame() {
+  selectedMatch = null;
+  matchedCount = 0;
+  gameSeconds = 0;
+  document.getElementById('matchResult').style.display = 'none';
+  document.getElementById('matchCount').textContent = '0';
+
+  if (gameTimerInterval) clearInterval(gameTimerInterval);
+  gameTimerInterval = setInterval(() => {
+    gameSeconds++;
+    document.getElementById('gameTimer').textContent = gameSeconds;
+  }, 1000);
+
+  const shuffledEn = [...matchingPairs].sort(() => Math.random() - 0.5);
+  const shuffledZh = [...matchingPairs].sort(() => Math.random() - 0.5);
+
+  const container = document.getElementById('matchingGame');
+  container.innerHTML = '';
+
+  // Left column: English
+  const leftCol = document.createElement('div');
+  leftCol.style.display = 'flex';
+  leftCol.style.flexDirection = 'column';
+  leftCol.style.gap = '10px';
+  shuffledEn.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'match-item';
+    div.dataset.type = 'en';
+    div.dataset.word = p.en;
+    div.dataset.pairZh = p.zh;
+    div.textContent = p.en;
+    div.onclick = () => handleMatchClick(div);
+    leftCol.appendChild(div);
+  });
+
+  // Right column: Chinese
+  const rightCol = document.createElement('div');
+  rightCol.style.display = 'flex';
+  rightCol.style.flexDirection = 'column';
+  rightCol.style.gap = '10px';
+  shuffledZh.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'match-item';
+    div.dataset.type = 'zh';
+    div.dataset.word = p.zh;
+    div.dataset.pairEn = p.en;
+    div.textContent = p.zh;
+    div.onclick = () => handleMatchClick(div);
+    rightCol.appendChild(div);
+  });
+
+  container.appendChild(leftCol);
+  container.appendChild(rightCol);
+}
+
+function handleMatchClick(el) {
+  if (el.classList.contains('matched')) return;
+
+  if (!selectedMatch) {
+    // First selection
+    selectedMatch = el;
+    el.classList.add('selected');
+  } else if (selectedMatch === el) {
+    // Deselect
+    el.classList.remove('selected');
+    selectedMatch = null;
+  } else {
+    // Second selection - check match
+    const first = selectedMatch;
+    const second = el;
+
+    const firstType = first.dataset.type;
+    const secondType = second.dataset.type;
+
+    if (firstType === secondType) {
+      // Same column clicked, switch selection
+      first.classList.remove('selected');
+      second.classList.add('selected');
+      selectedMatch = second;
+      return;
+    }
+
+    // Check if they match
+    let isMatch = false;
+    if (firstType === 'en' && secondType === 'zh') {
+      isMatch = first.dataset.pairZh === second.dataset.word;
+    } else {
+      isMatch = first.dataset.word === second.dataset.pairEn;
+    }
+
+    if (isMatch) {
+      first.classList.remove('selected');
+      first.classList.add('matched');
+      second.classList.add('matched');
+      matchedCount++;
+      document.getElementById('matchCount').textContent = matchedCount;
+      selectedMatch = null;
+
+      if (matchedCount === matchingPairs.length) {
+        clearInterval(gameTimerInterval);
+        gameTimerInterval = null;
+        document.getElementById('finalTime').textContent = gameSeconds;
+        document.getElementById('matchResult').style.display = 'block';
+        fireConfetti();
+      }
+    } else {
+      first.classList.add('wrong-match');
+      second.classList.add('wrong-match');
+      setTimeout(() => {
+        first.classList.remove('selected', 'wrong-match');
+        second.classList.remove('wrong-match');
+        selectedMatch = null;
+      }, 500);
+    }
+  }
+}
+
+// ===== CONFETTI =====
+function fireConfetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#00d4aa', '#ffd93d', '#ff6b6b', '#a855f7', '#66ffdd', '#ff9999', '#c084fc'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 1.5 + 's';
+    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    container.appendChild(piece);
+    setTimeout(() => piece.remove(), 4000);
+  }
+}
+
+// ===== BUBBLES =====
+function createBubbles() {
+  const ocean = document.getElementById('oceanBg');
+  for (let i = 0; i < 20; i++) {
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    const size = 10 + Math.random() * 40;
+    bubble.style.width = size + 'px';
+    bubble.style.height = size + 'px';
+    bubble.style.left = Math.random() * 100 + '%';
+    bubble.style.animationDuration = (6 + Math.random() * 10) + 's';
+    bubble.style.animationDelay = Math.random() * 8 + 's';
+    ocean.appendChild(bubble);
+  }
+}
+
+// ===== INIT =====
+window.addEventListener('load', () => {
+  createBubbles();
+  initVocab();
+  initListeningQuiz();
+  initQuiz();
+  updateProgress();
+
+  // Preload voices
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.getVoices();
+  }
+});
+</script>
+</body>
+</html>
