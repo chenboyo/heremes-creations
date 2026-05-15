@@ -273,11 +273,11 @@
       <p style="color:var(--text-muted); margin-bottom:14px;">點擊單字，把它放到正確的分類桶裡！</p>
       <p style="margin-bottom:14px;">✅ 正確：<span id="sortScore" style="color:var(--accent-light);font-weight:800;">0</span> | ❌ 錯誤：<span id="sortWrong" style="color:var(--coral-light);font-weight:800;">0</span></p>
       <div class="sort-area">
-        <div class="sort-bin" id="binCount">
+        <div class="sort-bin" id="binCount" onclick="placeInBin('count')" style="cursor:pointer;">
           <div class="bin-title" style="color:var(--accent-light);">✅ 可數 COUNT</div>
           <div class="bin-items" id="binCountItems"></div>
         </div>
-        <div class="sort-bin" id="binNoCount">
+        <div class="sort-bin" id="binNoCount" onclick="placeInBin('nocount')" style="cursor:pointer;">
           <div class="bin-title" style="color:var(--gold);">🚫 不可數 NO COUNT</div>
           <div class="bin-items" id="binNoCountItems"></div>
         </div>
