@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔢 單元三：可數 vs 不可數名詞 | Grammar I-1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800;900&display=swap');
+  :root {
+    --bg-deep: #0a1a0a; --bg-mid: #142814; --bg-card: #1c381c;
+    --accent: #6db86d; --accent-light: #9ee89e; --accent-glow: rgba(109,184,109,0.25);
+    --gold: #f0c040; --gold-light: #ffe08a;
+    --sky: #5bb5f0; --sky-light: #9ed8ff;
+    --coral: #e06060; --coral-light: #ff9090;
+    --purple: #a855f7; --purple-light: #c084fc;
+    --text: #e8f8e8; --text-muted: rgba(255,255,255,0.55);
+    --card: rgba(255,255,255,0.05); --border: rgba(255,255,255,0.08);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Nunito','Noto Sans TC',sans-serif; background:var(--bg-deep); color:var(--text); min-height:100vh; overflow-x:hidden; }
+  .bg { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; overflow:hidden; }
+  .leaf { position:absolute; bottom:-30px; animation:leafFloat linear infinite; opacity:0.1; font-size:1.2em; }
+  @keyframes leafFloat { 0%{transform:translateY(0) rotate(0);opacity:0} 20%{opacity:0.15} 100%{transform:translateY(-110vh) rotate(360deg);opacity:0} }
+  .app { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:20px; }
+  .header { text-align:center; padding:40px 20px 30px; }
+  .header h1 { font-size:2.2em; font-weight:900; background:linear-gradient(135deg,var(--accent-light),var(--gold),var(--sky-light)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:8px; }
+  .header .sub { font-size:1.05em; color:var(--text-muted); }
+  .mascot { font-size:3em; display:block; margin-bottom:10px; animation:hunt 3s ease-in-out infinite; }
+  @keyframes hunt { 0%,100%{transform:scaleX(1)} 50%{transform:scaleX(1.05)} }
+  .nav-tabs { display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; justify-content:center; }
+  .nav-tab { padding:10px 18px; border-radius:50px; border:2px solid rgba(109,184,109,0.3); background:transparent; color:var(--accent-light); font-family:inherit; font-size:0.9em; font-weight:700; cursor:pointer; transition:all 0.3s; }
+  .nav-tab:hover { background:rgba(109,184,109,0.1); border-color:var(--accent); transform:translateY(-2px); }
+  .nav-tab.active { background:var(--accent); color:var(--bg-deep); border-color:var(--accent); box-shadow:0 4px 20px var(--accent-glow); }
+  .section { display:none; animation:fadeIn 0.4s ease; }
+  .section.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
+  .card { background:var(--card); backdrop-filter:blur(20px); border:1px solid var(--border); border-radius:22px; padding:30px; margin-bottom:18px; position:relative; overflow:hidden; }
+  .card::before { content:''; position:absolute; top:0; left:0; width:100%; height:3px; background:linear-gradient(90deg,var(--accent),var(--gold),var(--sky)); }
+  .card-title { font-size:1.35em; font-weight:800; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+  .card-title .icon { font-size:1.25em; }
+  .speak-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 18px; border-radius:50px; border:2px solid var(--accent); background:transparent; color:var(--accent-light); font-family:inherit; font-size:0.9em; font-weight:700; cursor:pointer; transition:all 0.3s; margin:3px; }
+  .speak-btn:hover { background:var(--accent); color:var(--bg-deep); transform:translateY(-2px); box-shadow:0 4px 15px var(--accent-glow); }
+  .speak-btn.big { padding:14px 28px; font-size:1.1em; }
+  .speak-btn.gold { border-color:var(--gold); color:var(--gold); }
+  .speak-btn.gold:hover { background:var(--gold); color:var(--bg-deep); }
+  .progress-bar { width:100%; height:8px; background:rgba(255,255,255,0.06); border-radius:10px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:10px; transition:width 0.5s; }
+  /* Hunter game */
+  .hunter-item { display:flex; align-items:center; gap:12px; padding:14px 18px; background:rgba(255,255,255,0.03); border-radius:14px; margin-bottom:10px; border:1px solid var(--border); transition:all 0.3s; }
+  .hunter-item:hover { background:rgba(109,184,109,0.06); }
+  .hunter-emoji { font-size:1.8em; flex-shrink:0; }
+  .hunter-word { font-size:1.15em; font-weight:700; color:var(--accent-light); min-width:100px; }
+  .hunter-btns { display:flex; gap:8px; }
+  .hunter-btn { padding:8px 18px; border-radius:50px; border:2px solid var(--border); background:transparent; color:var(--text); font-family:inherit; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:0.9em; }
+  .hunter-btn:hover { border-color:var(--accent); }
+  .hunter-btn.sel-count { border-color:var(--accent); background:rgba(109,184,109,0.15); color:var(--accent-light); }
+  .hunter-btn.sel-nocount { border-color:var(--gold); background:rgba(240,192,64,0.15); color:var(--gold); }
+  .hunter-btn.correct { border-color:var(--accent)!important; background:rgba(109,184,109,0.2)!important; color:var(--accent-light)!important; }
+  .hunter-btn.wrong { border-color:var(--coral)!important; background:rgba(224,96,96,0.15)!important; color:var(--coral-light)!important; }
+  .hunter-result { font-size:0.82em; font-weight:600; }
+  /* Family boxes */
+  .family-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin:14px 0; }
+  .family-box { background:rgba(255,255,255,0.03); border-radius:16px; padding:18px; border:1px solid var(--border); }
+  .family-box .fb-title { font-size:1.05em; font-weight:800; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .family-box .fb-items { display:flex; flex-wrap:wrap; gap:6px; }
+  .family-box .fb-tag { padding:4px 10px; border-radius:50px; font-size:0.85em; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .family-box .fb-tag:hover { transform:scale(1.08); }
+  .fb-abstract .fb-title { color:var(--purple-light); }
+  .fb-abstract .fb-tag { background:rgba(168,85,247,0.12); color:var(--purple-light); }
+  .fb-powder .fb-title { color:var(--gold); }
+  .fb-powder .fb-tag { background:rgba(240,192,64,0.12); color:var(--gold); }
+  .fb-liquid .fb-title { color:var(--sky-light); }
+  .fb-liquid .fb-tag { background:rgba(91,181,240,0.12); color:var(--sky-light); }
+  /* Sorting game */
+  .sort-area { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0; }
+  .sort-bin { background:rgba(255,255,255,0.03); border:2px dashed var(--border); border-radius:16px; padding:16px; min-height:120px; transition:all 0.3s; }
+  .sort-bin.drag-over { border-color:var(--accent); background:rgba(109,184,109,0.08); }
+  .sort-bin .bin-title { font-size:1.1em; font-weight:800; text-align:center; margin-bottom:12px; }
+  .sort-bin .bin-items { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
+  .sort-chip { padding:6px 14px; border-radius:50px; font-size:0.88em; font-weight:600; cursor:pointer; transition:all 0.2s; background:rgba(255,255,255,0.06); border:1px solid var(--border); }
+  .sort-chip:hover { transform:scale(1.05); border-color:var(--accent); }
+  .sort-chip.placed { pointer-events:none; opacity:0.7; }
+  .sort-chip.correct { background:rgba(109,184,109,0.15)!important; border-color:var(--accent)!important; }
+  .sort-chip.wrong { background:rgba(224,96,96,0.12)!important; border-color:var(--coral)!important; }
+  /* Unit phrases */
+  .unit-table { width:100%; border-collapse:separate; border-spacing:0 5px; margin:12px 0; }
+  .unit-table th { background:rgba(109,184,109,0.12); color:var(--accent-light); padding:9px 12px; font-size:0.88em; text-align:left; }
+  .unit-table td { background:rgba(255,255,255,0.03); padding:9px 12px; font-size:0.92em; }
+  .unit-table tr td:first-child { border-radius:8px 0 0 8px; font-weight:700; }
+  .unit-table tr td:last-child { border-radius:0 8px 8px 0; }
+  /* Quiz */
+  .quiz-q { background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:18px; padding:22px; margin-bottom:14px; transition:all 0.3s; }
+  .quiz-q.answered { pointer-events:none; }
+  .quiz-q.correct { border-color:var(--accent); background:rgba(109,184,109,0.07); }
+  .quiz-q.wrong { border-color:var(--coral); background:rgba(224,96,96,0.07); }
+  .q-num { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--gold)); color:var(--bg-deep); font-weight:800; font-size:0.9em; margin-right:8px; }
+  .q-text { font-size:1.02em; font-weight:600; margin-bottom:12px; line-height:1.5; }
+  .options { display:flex; flex-direction:column; gap:8px; }
+  .opt { display:flex; align-items:center; gap:10px; padding:12px 16px; border-radius:12px; border:2px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.02); cursor:pointer; transition:all 0.3s; font-size:0.95em; }
+  .opt:hover:not(.disabled) { border-color:var(--accent); background:rgba(109,184,109,0.07); transform:translateX(4px); }
+  .opt.correct-answer { border-color:var(--accent)!important; background:rgba(109,184,109,0.15)!important; }
+  .opt.wrong-answer { border-color:var(--coral)!important; background:rgba(224,96,96,0.12)!important; }
+  .opt.disabled { cursor:default; }
+  .opt-letter { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.08); font-weight:700; font-size:0.85em; flex-shrink:0; }
+  .exp { margin-top:12px; padding:12px 16px; background:rgba(0,0,0,0.2); border-radius:10px; font-size:0.92em; line-height:1.6; display:none; border-left:3px solid var(--accent); }
+  .exp.show { display:block; animation:fadeIn 0.3s; }
+  /* Score */
+  .score-box { text-align:center; padding:28px; }
+  .score-circle { width:130px; height:130px; border-radius:50%; background:conic-gradient(var(--gold) var(--sdeg), rgba(255,255,255,0.05) 0); display:flex; align-items:center; justify-content:center; margin:0 auto 14px; position:relative; }
+  .score-circle::before { content:''; position:absolute; width:102px; height:102px; border-radius:50%; background:var(--bg-deep); }
+  .score-num { position:relative; z-index:1; font-size:2.2em; font-weight:900; color:var(--gold-light); }
+  .score-msg { font-size:1.15em; font-weight:700; color:var(--accent-light); }
+  .stars { font-size:1.8em; letter-spacing:4px; }
+  /* Confetti */
+  .confetti-wrap { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; }
+  .confetti-piece { position:absolute; width:10px; height:10px; border-radius:2px; animation:confFall 3s ease-out forwards; }
+  @keyframes confFall { 0%{transform:translateY(-10px) rotate(0);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+  /* Checklist */
+  .checklist { list-style:none; padding:0; }
+  .checklist li { display:flex; align-items:center; gap:12px; padding:12px 16px; background:rgba(255,255,255,0.03); border-radius:12px; margin-bottom:8px; cursor:pointer; transition:all 0.3s; border:1px solid var(--border); }
+  .checklist li:hover { background:rgba(109,184,109,0.06); }
+  .checklist li.checked { background:rgba(109,184,109,0.08); border-color:rgba(109,184,109,0.2); }
+  .checklist .ck-box { width:26px; height:26px; border-radius:6px; border:2px solid var(--accent); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.85em; transition:all 0.3s; }
+  .checklist li.checked .ck-box { background:var(--accent); border-color:var(--accent); color:var(--bg-deep); }
+  .checklist .ck-text { flex:1; font-size:0.95em; }
+  .checklist li.checked .ck-text { text-decoration:line-through; opacity:0.6; }
+  /* Golden quote */
+  .golden-quote { text-align:center; padding:24px; background:linear-gradient(135deg,rgba(109,184,109,0.08),rgba(240,192,64,0.08)); border-radius:16px; border:1px solid rgba(109,184,109,0.15); margin:16px 0; }
+  .golden-quote .quote-en { font-size:1.3em; font-weight:800; color:var(--accent-light); margin-bottom:6px; }
+  .golden-quote .quote-zh { font-size:0.95em; color:var(--text-muted); }
+  @media(max-width:640px) {
+    .header h1 { font-size:1.5em; } .card { padding:20px; }
+    .family-grid { grid-template-columns:1fr; } .sort-area { grid-template-columns:1fr; }
+    .nav-tab { padding:8px 12px; font-size:0.82em; }
+  }
+  ::-webkit-scrollbar { width:7px; } ::-webkit-scrollbar-track { background:var(--bg-deep); } ::-webkit-scrollbar-thumb { background:var(--bg-card); border-radius:4px; }
+  .footer { text-align:center; padding:28px; color:rgba(255,255,255,0.2); font-size:0.85em; }
+</style>
+</head>
+<body>
+<div class="bg" id="bg"></div>
+<div class="confetti-wrap" id="confettiWrap"></div>
+<div class="app">
+  <header class="header">
+    <span class="mascot">🏹</span>
+    <h1>單元三：可數 vs 不可數名詞</h1>
+    <p class="sub">Grammar I-1 · 東西數得了嗎？三大不可數家族大公開！</p>
+  </header>
+  <div class="progress-bar"><div class="progress-fill" id="pf" style="width:0%"></div></div>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="show('warm',this)">🔥 暖身</button>
+    <button class="nav-tab" onclick="show('teach',this)">📖 講解</button>
+    <button class="nav-tab" onclick="show('quiz',this)">🎯 測驗</button>
+    <button class="nav-tab" onclick="show('sort',this)">🗂️ 分類挑戰</button>
+    <button class="nav-tab" onclick="show('wrap',this)">💬 收尾</button>
+  </nav>
+
+  <!-- WARM UP -->
+  <div class="section active" id="s-warm">
+    <div class="card">
+      <div class="card-title"><span class="icon">🏹</span> 我是獵人 — 暖身活動</div>
+      <p style="color:var(--text-muted); margin-bottom:16px;">老師說出一個東西，你決定：數得了喊 COUNT！數不了喊 NO COUNT！</p>
+      <div id="hunterBox"></div>
+      <div id="hunterResult" style="text-align:center;margin-top:14px;display:none;">
+        <p style="font-size:1.1em;font-weight:700;color:var(--accent-light);">🏹 完成！答對 <span id="hunterScore">0</span>/15 題</p>
+        <button class="speak-btn" style="margin-top:10px" onclick="resetHunter()">🔄 再玩一次</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEACH -->
+  <div class="section" id="s-teach">
+    <div class="card">
+      <div class="card-title"><span class="icon">📖</span> 三大不可數家族</div>
+      <div style="background:rgba(109,184,109,0.08); border-radius:12px; padding:14px 18px; margin-bottom:14px; border-left:3px solid var(--accent);">
+        <strong style="color:var(--accent-light);">記憶口訣：</strong><br>
+        「看不見的不行數，有液體的不行數，顆粒太多也不行數！」
+      </div>
+      <div class="family-grid">
+        <div class="family-box fb-abstract">
+          <div class="fb-title">💭 家族一：抽象概念</div>
+          <div class="fb-items">
+            <span class="fb-tag" onclick="speak('love')">❤️ love</span>
+            <span class="fb-tag" onclick="speak('anger')">😠 anger</span>
+            <span class="fb-tag" onclick="speak('music')">🎵 music</span>
+            <span class="fb-tag" onclick="speak('homework')">📝 homework</span>
+            <span class="fb-tag" onclick="speak('time')">⏰ time</span>
+            <span class="fb-tag" onclick="speak('information')">💡 information</span>
+          </div>
+        </div>
+        <div class="family-box fb-powder">
+          <div class="fb-title">🌾 家族二：顆粒粉末</div>
+          <div class="fb-items">
+            <span class="fb-tag" onclick="speak('rice')">🍚 rice</span>
+            <span class="fb-tag" onclick="speak('salt')">🧂 salt</span>
+            <span class="fb-tag" onclick="speak('sugar')">⬜ sugar</span>
+            <span class="fb-tag" onclick="speak('flour')">🌾 flour</span>
+            <span class="fb-tag" onclick="speak('pepper')">🥬 pepper</span>
+          </div>
+        </div>
+        <div class="family-box fb-liquid">
+          <div class="fb-title">💧 家族三：液體氣體</div>
+          <div class="fb-items">
+            <span class="fb-tag" onclick="speak('water')">💧 water</span>
+            <span class="fb-tag" onclick="speak('milk')">🥛 milk</span>
+            <span class="fb-tag" onclick="speak('coffee')">☕ coffee</span>
+            <span class="fb-tag" onclick="speak('air')">🌬️ air</span>
+            <span class="fb-tag" onclick="speak('tea')">🍵 tea</span>
+            <span class="fb-tag" onclick="speak('juice')">🧴 juice</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">⚠️</span> 可數 vs 不可數陷阱</div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="padding:14px; background:rgba(224,96,96,0.06); border-radius:12px; border-left:3px solid var(--coral);">
+          <span style="color:var(--coral-light); font-weight:700;">❌ a water</span> → <span style="color:var(--accent-light); font-weight:700;">✅ a glass of water</span><br>
+          <span style="color:var(--text-muted); font-size:0.88em;">water 不可數，需要容器單位</span>
+        </div>
+        <div style="padding:14px; background:rgba(224,96,96,0.06); border-radius:12px; border-left:3px solid var(--coral);">
+          <span style="color:var(--coral-light); font-weight:700;">❌ an informations</span> → <span style="color:var(--accent-light); font-weight:700;">✅ a piece of information</span><br>
+          <span style="color:var(--text-muted); font-size:0.88em;">information 不可數，不能加 s</span>
+        </div>
+        <div style="padding:14px; background:rgba(224,96,96,0.06); border-radius:12px; border-left:3px solid var(--coral);">
+          <span style="color:var(--coral-light); font-weight:700;">❌ a rice</span> → <span style="color:var(--accent-light); font-weight:700;">✅ a grain / a bowl of rice</span><br>
+          <span style="color:var(--text-muted); font-size:0.88em;">rice 整體不可數，米粒才可以數</span>
+        </div>
+        <div style="padding:14px; background:rgba(224,96,96,0.06); border-radius:12px; border-left:3px solid var(--coral);">
+          <span style="color:var(--coral-light); font-weight:700;">❌ three breads</span> → <span style="color:var(--accent-light); font-weight:700;">✅ three pieces of bread</span><br>
+          <span style="color:var(--text-muted); font-size:0.88em;">bread 是物質名詞，不能直接加 s</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📏</span> 實用單位片語</div>
+      <table class="unit-table">
+        <thead><tr><th>單位</th><th>搭配</th><th>例句</th></tr></thead>
+        <tbody>
+          <tr><td>a cup of</td><td>coffee, tea</td><td>☕ a cup of coffee</td></tr>
+          <tr><td>a glass of</td><td>water, juice</td><td>💧 a glass of water</td></tr>
+          <tr><td>a bottle of</td><td>water, juice</td><td>🧴 a bottle of water</td></tr>
+          <tr><td>a slice of</td><td>bread, cheese</td><td>🍞 a slice of bread</td></tr>
+          <tr><td>a piece of</td><td>cheese, information</td><td>🧀 a piece of cheese</td></tr>
+          <tr><td>a bowl of</td><td>rice</td><td>🍚 a bowl of rice</td></tr>
+          <tr><td>a grain of</td><td>rice, salt</td><td>🌾 a grain of rice</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="section" id="s-quiz">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span> 閱讀測驗 — 可數 vs 不可數</div>
+      <p style="color:var(--text-muted); margin-bottom:16px;">共 8 題，選出正確的答案！</p>
+      <div id="quizBox"></div>
+    </div>
+    <div class="card" id="scoreCard" style="display:none;">
+      <div class="score-box">
+        <div class="score-circle" id="scCircle"><span class="score-num" id="scNum">0</span></div>
+        <div class="stars" id="scStars"></div>
+        <p class="score-msg" id="scMsg"></p>
+        <button class="speak-btn gold" style="margin-top:18px" onclick="resetQuiz()">🔄 再試一次</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SORTING GAME -->
+  <div class="section" id="s-sort">
+    <div class="card">
+      <div class="card-title"><span class="icon">🗂️</span> 終極分類挑戰</div>
+      <p style="color:var(--text-muted); margin-bottom:14px;">點擊單字，把它放到正確的分類桶裡！</p>
+      <p style="margin-bottom:14px;">✅ 正確：<span id="sortScore" style="color:var(--accent-light);font-weight:800;">0</span> | ❌ 錯誤：<span id="sortWrong" style="color:var(--coral-light);font-weight:800;">0</span></p>
+      <div class="sort-area">
+        <div class="sort-bin" id="binCount">
+          <div class="bin-title" style="color:var(--accent-light);">✅ 可數 COUNT</div>
+          <div class="bin-items" id="binCountItems"></div>
+        </div>
+        <div class="sort-bin" id="binNoCount">
+          <div class="bin-title" style="color:var(--gold);">🚫 不可數 NO COUNT</div>
+          <div class="bin-items" id="binNoCountItems"></div>
+        </div>
+      </div>
+      <div id="sortChips" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;justify-content:center;"></div>
+      <div id="sortResult" style="text-align:center;margin-top:16px;display:none;">
+        <p style="font-size:1.2em;font-weight:800;color:var(--accent-light);">🎉 全部分類完成！</p>
+        <button class="speak-btn" style="margin-top:12px" onclick="initSort()">🔄 再玩一次</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WRAP UP -->
+  <div class="section" id="s-wrap">
+    <div class="card">
+      <div class="card-title"><span class="icon">💬</span> 今日金句</div>
+      <div class="golden-quote">
+        <div class="quote-en">"You can't count love, but you can feel it."</div>
+        <div class="quote-zh">愛不能數，但你絕對能感受它。</div>
+      </div>
+      <button class="speak-btn big gold" onclick="speak(\"You can't count love, but you can feel it.\")">🔊 聽發音</button>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🛂</span> 今日收穫護照</div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">可數名詞 vs 不可數名詞的區別</div></li>
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">三大不可數家族：抽象、顆粒、液體</div></li>
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">不可數名詞要用單位（a glass of water）</div></li>
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">不可數名詞不能直接加 s</div></li>
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">能用單位片語表達不可數名詞</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">🔢 博幼英文文法 I-1 · 單元三：可數 vs 不可數名詞</div>
+</div>
+
+<script>
+const hunterWords = [
+  {w:"apple",emoji:"🍎",count:true},{w:"water",emoji:"💧",count:false},
+  {w:"shoes",emoji:"👟",count:true},{w:"rice",emoji:"🍚",count:false},
+  {w:"dog",emoji:"🐕",count:true},{w:"butter",emoji:"🧈",count:false},
+  {w:"cookies",emoji:"🍪",count:true},{w:"time",emoji:"⏰",count:false},
+  {w:"love",emoji:"❤️",count:false},{w:"chairs",emoji:"🪑",count:true},
+  {w:"milk",emoji:"🥛",count:false},{w:"book",emoji:"📚",count:true},
+  {w:"music",emoji:"🎵",count:false},{w:"egg",emoji:"🥚",count:true},
+  {w:"homework",emoji:"📝",count:false}
+];
+const quizData = [
+  {q:"Which is correct?",opts:["a water","a glass of water","an water","waters"],a:1,ex:"water 不可數，需要容器單位 a glass of water。"},
+  {q:"Which is correct?",opts:["an informations","informations","a piece of information","one information"],a:2,ex:"information 不可數，不能加 s，用 a piece of。"},
+  {q:"Which is correct?",opts:["a rice","rices","a grain of rice","one rice"],a:2,ex:"rice 整體不可數，a grain of rice（一粒米）才正確。"},
+  {q:"Which is correct?",opts:["three breads","three bread","three pieces of bread","three slice of bread"],a:2,ex:"bread 不可數，用 three pieces of bread。"},
+  {q:"Which is a countable noun?",opts:["water","music","apple","milk"],a:2,ex:"apple 可以一顆一顆數，是可數名詞。"},
+  {q:"Which is an uncountable noun?",opts:["dog","book","egg","coffee"],a:3,ex:"coffee 是液體，不可數。"},
+  {q:"Complete: I need ___.",opts:["a advice","an advice","a piece of advice","one advice"],a:2,ex:"advice 不可數，用 a piece of advice。"},
+  {q:"Complete: She bought ___.",opts:["a furniture","furnitures","a piece of furniture","one furniture"],a:2,ex:"furniture 不可數，用 a piece of furniture。"}
+];
+const sortWords = [
+  {w:"apple",count:true},{w:"water",count:false},{w:"book",count:true},{w:"rice",count:false},
+  {w:"dog",count:true},{w:"milk",count:false},{w:"egg",count:true},{w:"music",count:false},
+  {w:"chair",count:true},{w:"time",count:false},{w:"cookie",count:true},{w:"love",count:false},
+  {w:"car",count:true},{w:"coffee",count:false},{w:"shoe",count:true},{w:"homework",count:false}
+];
+let hunterAnswered=[],hunterScore=0,answered=[],score=0,sortDone=[],sortCorrect=0,sortWrongCount=0,currentSortTarget=null;
+function speak(t){if(!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=0.85;const v=window.speechSynthesis.getVoices();const p=v.find(x=>x.lang.startsWith('en')&&x.name.includes('Google'))||v.find(x=>x.lang.startsWith('en-US'));if(p)u.voice=p;window.speechSynthesis.speak(u);}
+let currentSection='reading';
+function show(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('s-'+id).classList.add('active');if(btn)btn.classList.add('active');currentSection=id;updateP();if(id==='sort')initSort();}
+function updateP(){const m={warm:16,teach:33,quiz:55,sort:75,wrap:100};document.getElementById('pf').style.width=(m[currentSection]||0)+'%';}
+/* Hunter */
+function initHunter(){const box=document.getElementById('hunterBox');box.innerHTML='';hunterAnswered=[...Array(hunterWords.length)].fill(false);hunterScore=0;document.getElementById('hunterResult').style.display='none';hunterWords.forEach((hw,i)=>{const d=document.createElement('div');d.className='hunter-item';d.id='h'+i;d.innerHTML=`<span class="hunter-emoji">${hw.emoji}</span><span class="hunter-word" onclick="speak('${hw.w}')">${hw.w}</span><div class="hunter-btns"><button class="hunter-btn" onclick="hunterCheck(${i},true,this)">COUNT!</button><button class="hunter-btn" onclick="hunterCheck(${i},false,this)">NO COUNT!</button></div><span class="hunter-result" id="hr${i}"></span>`;box.appendChild(d);});}
+function hunterCheck(idx,choice,btn){if(hunterAnswered[idx])return;hunterAnswered[idx]=true;const item=document.getElementById('h'+idx),btns=item.querySelectorAll('.hunter-btn'),sr=document.getElementById('hr'+idx);btns.forEach(b=>b.style.pointerEvents='none');const correct=hunterWords[idx].count;if(choice===correct){btn.classList.add('correct');sr.textContent='✅';sr.style.color='var(--accent-light)';hunterScore++;}else{btn.classList.add('wrong');btns.forEach(b=>{const isCountBtn=b.textContent.includes('COUNT')&&!b.textContent.includes('NO');if((isCountBtn&&correct)||(!isCountBtn&&!correct))b.classList.add('correct');});sr.textContent='❌';sr.style.color='var(--coral-light)';}if(hunterAnswered.every(a=>a)){document.getElementById('hunterScore').textContent=hunterScore;document.getElementById('hunterResult').style.display='block';if(hunterScore>=12)fireConfetti();}}
+function resetHunter(){initHunter();}
+/* Quiz */
+function initQuiz(){document.getElementById('quizBox').innerHTML=quizData.map((q,i)=>`<div class="quiz-q" id="q${i}"><div class="q-text"><span class="q-num">${i+1}</span>${q.q}</div><div class="options">${q.options.map((o,j)=>`<div class="opt" onclick="check(${i},${j},this)"><span class="opt-letter">${String.fromCharCode(65+j)}</span><span>${o}</span></div>`).join('')}</div><div class="exp" id="e${i}">${q.ex}</div></div>`).join('');answered=[...Array(quizData.length)].fill(false);score=0;}
+function check(qi,oi,el){if(answered[qi])return;answered[qi]=true;const c=document.getElementById('q'+qi),opts=c.querySelectorAll('.opt'),exp=document.getElementById('e'+qi);opts.forEach(o=>o.classList.add('disabled'));if(oi===quizData[qi].a){el.classList.add('correct-answer');c.classList.add('correct');score++;}else{el.classList.add('wrong-answer');c.classList.add('wrong');opts[quizData[qi].a].classList.add('correct-answer');}exp.classList.add('show');if(answered.every(a=>a))setTimeout(showScore,600);}
+function showScore(){const c=document.getElementById('scoreCard');c.style.display='block';document.getElementById('scNum').textContent=score+'/8';document.getElementById('scCircle').style.setProperty('--sdeg',(score/8*360)+'deg');let s='',m='';if(score===8){s='⭐⭐⭐⭐⭐';m='🏆 滿分！你是可數不可數大師！';}else if(score>=6){s='⭐⭐⭐⭐';m='👏 很棒！幾乎全對！';}else if(score>=4){s='⭐⭐⭐';m='👍 不錯喔！繼續加油！';}else{s='⭐⭐';m='💪 再多練習幾次吧！';}document.getElementById('scStars').textContent=s;document.getElementById('scMsg').textContent=m;if(score>=6)fireConfetti();c.scrollIntoView({behavior:'smooth'});}
+function resetQuiz(){document.getElementById('scoreCard').style.display='none';initQuiz();window.scrollTo({top:0,behavior:'smooth'});}
+/* Sorting */
+function initSort(){sortDone=[...Array(sortWords.length)].fill(false);sortCorrect=0;sortWrongCount=0;currentSortTarget=null;document.getElementById('sortScore').textContent='0';document.getElementById('sortWrong').textContent='0';document.getElementById('sortResult').style.display='none';document.getElementById('binCountItems').innerHTML='';document.getElementById('binNoCountItems').innerHTML='';const chips=document.getElementById('sortChips');chips.innerHTML='';const shuffled=[...sortWords].sort(()=>Math.random()-0.5);shuffled.forEach((sw,i)={const idx=sortWords.indexOf(sw);const chip=document.createElement('span');chip.className='sort-chip';chip.textContent=sw.w;chip.id='sc'+idx;chip.onclick=()=>selectChip(idx);chips.appendChild(chip);});}
+function selectChip(idx){if(sortDone[idx])return;document.querySelectorAll('.sort-chip').forEach(c=>c.style.outline='none');document.getElementById('sc'+idx).style.outline='2px solid var(--accent)';currentSortTarget=idx;}
+function placeInBin(binType){if(currentSortTarget===null)return;const idx=currentSortTarget;const sw=sortWords[idx];const isCountBin=binType==='count';sortDone[idx]=true;document.getElementById('sc'+idx).style.outline='none';if(sw.count===isCountBin){sortCorrect++;document.getElementById('sortScore').textContent=sortCorrect;document.getElementById('sc'+idx).classList.add('placed','correct');const targetBin=document.getElementById(isCountBin?'binCountItems':'binNoCountItems');const placed=document.createElement('span');placed.className='sort-chip correct';placed.textContent=sw.w;targetBin.appendChild(placed);}else{sortWrongCount++;document.getElementById('sortWrong').textContent=sortWrongCount;document.getElementById('sc'+idx).classList.add('placed','wrong');const wrongBin=document.getElementById(isCountBin?'binNoCountItems':'binCountItems');const placed=document.createElement('span');placed.className='sort-chip wrong';placed.textContent=sw.w;wrongBin.appendChild(placed);}currentSortTarget=null;if(sortDone.every(d=>d)){document.getElementById('sortResult').style.display='block';if(sortCorrect>=14)fireConfetti();}}
+/* Toggle checklist */
+function toggleCheck(li){li.classList.toggle('checked');const cb=li.querySelector('.ck-box');cb.textContent=li.classList.contains('checked')?'✓':'';}
+/* Confetti */
+function fireConfetti(){const c=document.getElementById('confettiWrap');const colors=['#6db86d','#f0c040','#5bb5f0','#a855f7','#9ee89e','#ffe08a'];for(let i=0;i<50;i++){const p=document.createElement('div');p.className='confetti-piece';p.style.left=Math.random()*100+'%';p.style.background=colors[i%colors.length];p.style.animationDelay=Math.random()*1.5+'s';p.style.animationDuration=(2+Math.random()*2)+'s';c.appendChild(p);setTimeout(()=>p.remove(),4000);}}
+/* Leaves */
+function createLeaves(){const bg=document.getElementById('bg');const leaves=['🍃','🌿','🍂','🌱'];for(let i=0;i<20;i++){const l=document.createElement('div');l.className='leaf';l.textContent=leaves[i%leaves.length];l.style.left=Math.random()*100+'%';l.style.animationDuration=(10+Math.random()*15)+'s';l.style.animationDelay=Math.random()*10+'s';bg.appendChild(l);}}
+window.addEventListener('load',()=>{createLeaves();initHunter();initQuiz();updateP();if('speechSynthesis'in window)window.speechSynthesis.getVoices();});
+</script>
+</body>
+</html>

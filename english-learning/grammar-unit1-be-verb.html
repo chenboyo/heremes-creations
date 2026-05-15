@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦊 單元一：Be 動詞遇見主詞 | Grammar I-1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800;900&display=swap');
+  :root {
+    --bg-deep: #0f0a1a; --bg-mid: #1a1028; --bg-card: #241838;
+    --accent: #a855f7; --accent-light: #c084fc; --accent-glow: rgba(168,85,247,0.25);
+    --gold: #f0c040; --gold-light: #ffe08a;
+    --grass: #6db86d; --grass-light: #9ee89e;
+    --coral: #e06060; --coral-light: #ff9090;
+    --sky: #5bb5f0; --sky-light: #9ed8ff;
+    --text: #f0e8f8; --text-muted: rgba(255,255,255,0.55);
+    --card: rgba(255,255,255,0.05); --border: rgba(255,255,255,0.08);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Nunito','Noto Sans TC',sans-serif; background:var(--bg-deep); color:var(--text); min-height:100vh; overflow-x:hidden; }
+  .bg { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; overflow:hidden; }
+  .star { position:absolute; border-radius:50%; background:var(--accent-light); animation:twinkle linear infinite; opacity:0.3; }
+  @keyframes twinkle { 0%,100%{opacity:0.2;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.3)} }
+  .app { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:20px; }
+  .header { text-align:center; padding:40px 20px 30px; }
+  .header h1 { font-size:2.2em; font-weight:900; background:linear-gradient(135deg,var(--accent-light),var(--gold),var(--sky-light)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:8px; }
+  .header .sub { font-size:1.05em; color:var(--text-muted); }
+  .mascot { font-size:3em; display:block; margin-bottom:10px; animation:bounce 2s ease-in-out infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .nav-tabs { display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; justify-content:center; }
+  .nav-tab { padding:10px 18px; border-radius:50px; border:2px solid rgba(168,85,247,0.3); background:transparent; color:var(--accent-light); font-family:inherit; font-size:0.9em; font-weight:700; cursor:pointer; transition:all 0.3s; }
+  .nav-tab:hover { background:rgba(168,85,247,0.1); border-color:var(--accent); transform:translateY(-2px); }
+  .nav-tab.active { background:var(--accent); color:var(--bg-deep); border-color:var(--accent); box-shadow:0 4px 20px var(--accent-glow); }
+  .section { display:none; animation:fadeIn 0.4s ease; }
+  .section.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
+  .card { background:var(--card); backdrop-filter:blur(20px); border:1px solid var(--border); border-radius:22px; padding:30px; margin-bottom:18px; position:relative; overflow:hidden; }
+  .card::before { content:''; position:absolute; top:0; left:0; width:100%; height:3px; background:linear-gradient(90deg,var(--accent),var(--gold),var(--sky)); }
+  .card-title { font-size:1.35em; font-weight:800; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+  .card-title .icon { font-size:1.25em; }
+  .speak-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 18px; border-radius:50px; border:2px solid var(--accent); background:transparent; color:var(--accent-light); font-family:inherit; font-size:0.9em; font-weight:700; cursor:pointer; transition:all 0.3s; margin:3px; }
+  .speak-btn:hover { background:var(--accent); color:var(--bg-deep); transform:translateY(-2px); box-shadow:0 4px 15px var(--accent-glow); }
+  .speak-btn.big { padding:14px 28px; font-size:1.1em; }
+  .speak-btn.gold { border-color:var(--gold); color:var(--gold); }
+  .speak-btn.gold:hover { background:var(--gold); color:var(--bg-deep); }
+  .progress-bar { width:100%; height:8px; background:rgba(255,255,255,0.06); border-radius:10px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:10px; transition:width 0.5s; }
+  /* Story / Wizard */
+  .wizard-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:16px 0; }
+  .wizard-card { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:16px; padding:20px; text-align:center; transition:all 0.3s; cursor:pointer; }
+  .wizard-card:hover { background:rgba(168,85,247,0.08); border-color:var(--accent); transform:translateY(-3px); }
+  .wizard-card .wz-emoji { font-size:2.5em; margin-bottom:8px; display:block; }
+  .wizard-card .wz-name { font-size:1.3em; font-weight:800; color:var(--accent-light); margin-bottom:4px; }
+  .wizard-card .wz-partner { font-size:0.95em; color:var(--gold); font-weight:700; margin-bottom:6px; }
+  .wizard-card .wz-ex { font-size:0.9em; color:var(--text-muted); }
+  /* Rule table */
+  .rule-table { width:100%; border-collapse:separate; border-spacing:0 6px; margin:12px 0; }
+  .rule-table th { background:rgba(168,85,247,0.15); color:var(--accent-light); padding:10px 14px; font-size:0.9em; text-align:left; }
+  .rule-table td { background:rgba(255,255,255,0.03); padding:10px 14px; font-size:0.95em; }
+  .rule-table tr td:first-child { border-radius:10px 0 0 10px; font-weight:700; color:var(--gold-light); }
+  .rule-table tr td:last-child { border-radius:0 10px 10px 0; }
+  .rule-table .check { color:var(--grass-light); }
+  .rule-table .cross { color:var(--coral-light); }
+  /* Quiz */
+  .quiz-q { background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:18px; padding:22px; margin-bottom:14px; transition:all 0.3s; }
+  .quiz-q.answered { pointer-events:none; }
+  .quiz-q.correct { border-color:var(--grass); background:rgba(109,184,109,0.07); }
+  .quiz-q.wrong { border-color:var(--coral); background:rgba(224,96,96,0.07); }
+  .q-num { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--gold)); color:var(--bg-deep); font-weight:800; font-size:0.9em; margin-right:8px; }
+  .q-text { font-size:1.02em; font-weight:600; margin-bottom:12px; line-height:1.5; }
+  .options { display:flex; flex-direction:column; gap:8px; }
+  .opt { display:flex; align-items:center; gap:10px; padding:12px 16px; border-radius:12px; border:2px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.02); cursor:pointer; transition:all 0.3s; font-size:0.95em; }
+  .opt:hover:not(.disabled) { border-color:var(--accent); background:rgba(168,85,247,0.07); transform:translateX(4px); }
+  .opt.correct-answer { border-color:var(--grass)!important; background:rgba(109,184,109,0.15)!important; }
+  .opt.wrong-answer { border-color:var(--coral)!important; background:rgba(224,96,96,0.12)!important; }
+  .opt.disabled { cursor:default; }
+  .opt-letter { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.08); font-weight:700; font-size:0.85em; flex-shrink:0; }
+  .exp { margin-top:12px; padding:12px 16px; background:rgba(0,0,0,0.2); border-radius:10px; font-size:0.92em; line-height:1.6; display:none; border-left:3px solid var(--grass); }
+  .exp.show { display:block; animation:fadeIn 0.3s; }
+  /* Score */
+  .score-box { text-align:center; padding:28px; }
+  .score-circle { width:130px; height:130px; border-radius:50%; background:conic-gradient(var(--gold) var(--sdeg), rgba(255,255,255,0.05) 0); display:flex; align-items:center; justify-content:center; margin:0 auto 14px; position:relative; }
+  .score-circle::before { content:''; position:absolute; width:102px; height:102px; border-radius:50%; background:var(--bg-deep); }
+  .score-num { position:relative; z-index:1; font-size:2.2em; font-weight:900; color:var(--gold-light); }
+  .score-msg { font-size:1.15em; font-weight:700; color:var(--accent-light); }
+  .stars { font-size:1.8em; letter-spacing:4px; }
+  /* Matching */
+  .match-game { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .match-item { padding:13px 16px; border-radius:12px; border:2px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.02); cursor:pointer; text-align:center; font-weight:600; transition:all 0.3s; font-size:0.93em; }
+  .match-item:hover { border-color:var(--accent); transform:scale(1.02); }
+  .match-item.selected { border-color:var(--gold); background:rgba(240,192,64,0.1); }
+  .match-item.matched { border-color:var(--grass); background:rgba(109,184,109,0.1); pointer-events:none; opacity:0.6; }
+  .match-item.wrong-match { animation:shake 0.5s; border-color:var(--coral); }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+  /* Warm-up action cards */
+  .action-card { display:flex; align-items:center; gap:14px; padding:16px; background:rgba(255,255,255,0.03); border-radius:14px; margin-bottom:10px; border:1px solid var(--border); transition:all 0.3s; }
+  .action-card:hover { background:rgba(168,85,247,0.06); border-color:rgba(168,85,247,0.2); }
+  .action-card .act-emoji { font-size:1.8em; flex-shrink:0; }
+  .action-card .act-text { flex:1; }
+  .action-card .act-en { font-weight:700; color:var(--accent-light); font-size:1.05em; }
+  .action-card .act-zh { color:var(--text-muted); font-size:0.9em; margin-top:2px; }
+  .action-card .act-target { font-size:0.85em; color:var(--gold); font-weight:600; white-space:nowrap; }
+  /* Checklist */
+  .checklist { list-style:none; padding:0; }
+  .checklist li { display:flex; align-items:center; gap:12px; padding:12px 16px; background:rgba(255,255,255,0.03); border-radius:12px; margin-bottom:8px; cursor:pointer; transition:all 0.3s; border:1px solid var(--border); }
+  .checklist li:hover { background:rgba(168,85,247,0.06); }
+  .checklist li.checked { background:rgba(109,184,109,0.08); border-color:rgba(109,184,199,0.2); }
+  .checklist .ck-box { width:26px; height:26px; border-radius:6px; border:2px solid var(--accent); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.85em; transition:all 0.3s; }
+  .checklist li.checked .ck-box { background:var(--grass); border-color:var(--grass); color:var(--bg-deep); }
+  .checklist .ck-text { flex:1; font-size:0.95em; }
+  .checklist li.checked .ck-text { text-decoration:line-through; opacity:0.6; }
+  /* Confetti */
+  .confetti-wrap { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; }
+  .confetti-piece { position:absolute; width:10px; height:10px; border-radius:2px; animation:confFall 3s ease-out forwards; }
+  @keyframes confFall { 0%{transform:translateY(-10px) rotate(0);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+  /* Golden quote */
+  .golden-quote { text-align:center; padding:24px; background:linear-gradient(135deg,rgba(240,192,64,0.08),rgba(168,85,247,0.08)); border-radius:16px; border:1px solid rgba(240,192,64,0.15); margin:16px 0; }
+  .golden-quote .quote-en { font-size:1.3em; font-weight:800; color:var(--gold-light); margin-bottom:6px; }
+  .golden-quote .quote-zh { font-size:0.95em; color:var(--text-muted); }
+  @media(max-width:640px) {
+    .header h1 { font-size:1.5em; } .card { padding:20px; }
+    .wizard-grid { grid-template-columns:1fr 1fr; } .match-game { grid-template-columns:1fr; }
+    .nav-tab { padding:8px 12px; font-size:0.82em; }
+  }
+  ::-webkit-scrollbar { width:7px; } ::-webkit-scrollbar-track { background:var(--bg-deep); } ::-webkit-scrollbar-thumb { background:var(--bg-card); border-radius:4px; }
+  .footer { text-align:center; padding:28px; color:rgba(255,255,255,0.2); font-size:0.85em; }
+</style>
+</head>
+<body>
+<div class="bg" id="bg"></div>
+<div class="confetti-wrap" id="confettiWrap"></div>
+<div class="app">
+  <header class="header">
+    <span class="mascot">🦊</span>
+    <h1>單元一：Be 動詞遇見主詞</h1>
+    <p class="sub">Grammar I-1 · 自我介紹大作戰 — Be 動詞三俠出動！</p>
+  </header>
+  <div class="progress-bar"><div class="progress-fill" id="pf" style="width:0%"></div></div>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="show('warm',this)">🔥 暖身</button>
+    <button class="nav-tab" onclick="show('teach',this)">📖 講解</button>
+    <button class="nav-tab" onclick="show('quiz',this)">🎯 測驗</button>
+    <button class="nav-tab" onclick="show('game',this)">🎮 遊戲</button>
+    <button class="nav-tab" onclick="show('wrap',this)">💬 收尾</button>
+  </nav>
+
+  <!-- WARM UP -->
+  <div class="section active" id="s-warm">
+    <div class="card">
+      <div class="card-title"><span class="icon">🔥</span> 大家來比 ✋ — 暖身活動</div>
+      <p style="color:var(--text-muted); margin-bottom:16px;">老師說指令，你用動作回應！點擊每個指令聽發音 👇</p>
+      <div class="action-card" onclick="speak('I am happy.')">
+        <span class="act-emoji">😊</span>
+        <div class="act-text"><div class="act-en">I am happy.</div><div class="act-zh">開心</div></div>
+        <span class="act-target">對自己比 👆</span>
+        <button class="speak-btn" onclick="event.stopPropagation();speak('I am happy.')">🔊</button>
+      </div>
+      <div class="action-card" onclick="speak('You are tall.')">
+        <span class="act-emoji">📏</span>
+        <div class="act-text"><div class="act-en">You are tall.</div><div class="act-zh">高</div></div>
+        <span class="act-target">對旁邊同學比 👆</span>
+        <button class="speak-btn" onclick="event.stopPropagation();speak('You are tall.')">🔊</button>
+      </div>
+      <div class="action-card" onclick="speak('She is smart.')">
+        <span class="act-emoji">🧠</span>
+        <div class="act-text"><div class="act-en">She is smart.</div><div class="act-zh">聰明</div></div>
+        <span class="act-target">對女生同學比 👆</span>
+        <button class="speak-btn" onclick="event.stopPropagation();speak('She is smart.')">🔊</button>
+      </div>
+      <div class="action-card" onclick="speak('He is cool.')">
+        <span class="act-emoji">😎</span>
+        <div class="act-text"><div class="act-en">He is cool.</div><div class="act-zh">酷</div></div>
+        <span class="act-target">對男生同學比 👆</span>
+        <button class="speak-btn" onclick="event.stopPropagation();speak('He is cool.')">🔊</button>
+      </div>
+      <div class="action-card" onclick="speak('It is small.')">
+        <span class="act-emoji">🤏</span>
+        <div class="act-text"><div class="act-en">It is small.</div><div class="act-zh">小</div></div>
+        <span class="act-target">對桌上的東西比 👆</span>
+        <button class="speak-btn" onclick="event.stopPropagation();speak('It is small.')">🔊</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEACH -->
+  <div class="section" id="s-teach">
+    <div class="card">
+      <div class="card-title"><span class="icon">🧙‍♂️</span> Be 動詞三俠的故事</div>
+      <p style="color:var(--text-muted); margin-bottom:16px;">從前有三個魔法師，他們各自認不同的人。點擊卡片聽發音！</p>
+      <div class="wizard-grid">
+        <div class="wizard-card" onclick="speak('am')">
+          <span class="wz-emoji">🧙</span>
+          <div class="wz-name">am</div>
+          <div class="wz-partner">只認「I」</div>
+          <div class="wz-ex">I <strong>am</strong> a student.</div>
+        </div>
+        <div class="wizard-card" onclick="speak('is')">
+          <span class="wz-emoji">🧙‍♂️</span>
+          <div class="wz-name">is</div>
+          <div class="wz-partner">認 he / she / it</div>
+          <div class="wz-ex">He <strong>is</strong> tall.</div>
+        </div>
+        <div class="wizard-card" onclick="speak('are')">
+          <span class="wz-emoji">🧙‍♀️</span>
+          <div class="wz-name">are</div>
+          <div class="wz-partner">認 you / we / they</div>
+          <div class="wz-ex">We <strong>are</strong> friends.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📋</span> 記憶口訣 & 規則表</div>
+      <div style="background:rgba(168,85,247,0.08); border-radius:12px; padding:14px 18px; margin-bottom:14px; border-left:3px solid var(--accent);">
+        <strong style="color:var(--gold-light);">記憶口訣：</strong><br>
+        「I 用 am，he/she/it 用 is」<br>
+        「複數（2人以上）統統用 are」
+      </div>
+      <table class="rule-table">
+        <thead><tr><th>主詞</th><th>Be 動詞</th><th>例句</th><th>✓ / ✗</th></tr></thead>
+        <tbody>
+          <tr><td>I</td><td>am</td><td class="check">I am a student.</td><td>✅</td></tr>
+          <tr><td>You</td><td>are</td><td class="check">You are cool.</td><td>✅</td></tr>
+          <tr><td>He / She / It</td><td>is</td><td class="check">She is pretty.</td><td>✅</td></tr>
+          <tr><td>We / They</td><td>are</td><td class="check">They are here.</td><td>✅</td></tr>
+          <tr><td>Tom (名詞)</td><td>is</td><td class="check">Tom is a teacher.</td><td>✅</td></tr>
+          <tr><td>I</td><td>are</td><td class="cross">I are a student.</td><td>❌</td></tr>
+          <tr><td>She</td><td>are</td><td class="cross">She are nice.</td><td>❌</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">⚠️</span> 常見地雷</div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="padding:14px; background:rgba(224,96,96,0.07); border-radius:12px; border-left:3px solid var(--coral);">
+          <span class="cross">❌ I are a student.</span><br>
+          <span style="color:var(--text-muted); font-size:0.9em;">→ am 只認 I，I 只能配 am！</span>
+        </div>
+        <div style="padding:14px; background:rgba(224,96,96,0.07); border-radius:12px; border-left:3px solid var(--coral);">
+          <span class="cross">❌ She are nice.</span><br>
+          <span style="color:var(--text-muted); font-size:0.9em;">→ she 是單數，要配 is！</span>
+        </div>
+        <div style="padding:14px; background:rgba(224,96,96,0.07); border-radius:12px; border-left:3px solid var(--coral);">
+          <span class="cross">❌ They is happy.</span><br>
+          <span style="color:var(--text-muted); font-size:0.9em;">→ they 是複數，要配 are！</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="section" id="s-quiz">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span> 閱讀測驗 — Be 動詞選擇題</div>
+      <p style="color:var(--text-muted); margin-bottom:16px;">共 8 題，選出正確的 Be 動詞！</p>
+      <div id="quizBox"></div>
+    </div>
+    <div class="card" id="scoreCard" style="display:none;">
+      <div class="score-box">
+        <div class="score-circle" id="scCircle"><span class="score-num" id="scNum">0</span></div>
+        <div class="stars" id="scStars"></div>
+        <p class="score-msg" id="scMsg"></p>
+        <button class="speak-btn gold" style="margin-top:18px" onclick="resetQuiz()">🔄 再試一次</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div class="section" id="s-game">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎮</span> 間諜遊戲 — 主詞配對 Be 動詞</div>
+      <p style="color:var(--text-muted); margin-bottom:14px;">點擊主詞，再點擊正確的 Be 動詞！</p>
+      <p style="margin-bottom:14px;">⏱️ <span id="timer" style="color:var(--gold);font-weight:800;">0</span> 秒 | ✅ <span id="mCount" style="color:var(--grass);font-weight:800;">0</span>/8</p>
+      <div class="match-game" id="matchGame"></div>
+      <div id="matchResult" style="text-align:center;margin-top:18px;display:none;">
+        <p style="font-size:1.2em;font-weight:800;color:var(--gold);">🎉 太厲害了！全部配對完成！</p>
+        <p style="color:var(--text-muted);margin-top:6px;">總共用時：<span id="finalTime" style="color:var(--grass);font-weight:700;"></span> 秒</p>
+        <button class="speak-btn gold" style="margin-top:14px" onclick="initMatch()">🔄 再玩一次</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WRAP UP -->
+  <div class="section" id="s-wrap">
+    <div class="card">
+      <div class="card-title"><span class="icon">💬</span> 今日金句</div>
+      <div class="golden-quote">
+        <div class="quote-en">"I am who I am."</div>
+        <div class="quote-zh">我就是我。（要有自信！）</div>
+      </div>
+      <button class="speak-btn big gold" onclick="speak('I am who I am.')">🔊 聽發音</button>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🛂</span> 今日收穫護照</div>
+      <p style="color:var(--text-muted); margin-bottom:14px;">完成學習後，勾選你學會的項目：</p>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">I am / You are / He is / She is / It is / We are / They are</div></li>
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">Be 動詞三俠：am 只認 I，is 認 he/she/it，are 認複數</div></li>
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">名詞（如 Tom）也可以配 is</div></li>
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">能用 Be 動詞自我介紹</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">🦊 博幼英文文法 I-1 · 單元一：Be 動詞遇見主詞</div>
+</div>
+
+<script>
+const quizData = [
+  {q:"___ a student.",opts:["I am","I is","I are","I be"],a:0,ex:"I 只能配 am。"},
+  {q:"You ___ cool.",opts:["am","is","are","be"],a:2,ex:"You 配 are。"},
+  {q:"She ___ pretty.",opts:["am","is","are","be"],a:1,ex:"She 是單數，配 is。"},
+  {q:"He ___ tall.",opts:["am","is","are","be"],a:1,ex:"He 是單數，配 is。"},
+  {q:"It ___ cute.",opts:["am","is","are","be"],a:1,ex:"It 是單數，配 is。"},
+  {q:"We ___ friends.",opts:["am","is","are","be"],a:2,ex:"We 是複數，配 are。"},
+  {q:"They ___ here.",opts:["am","is","are","be"],a:2,ex:"They 是複數，配 are。"},
+  {q:"Tom ___ a teacher.",opts:["am","is","are","be"],a:1,ex:"Tom 是名詞（第三人稱單數），配 is。"}
+];
+const matchPairs = [
+  {left:"I",right:"am"},{left:"You",right:"are"},{left:"He",right:"is"},
+  {left:"She",right:"is"},{left:"It",right:"is"},{left:"We",right:"are"},
+  {left:"They",right:"are"},{left:"Tom",right:"is"}
+];
+let answered=[],score=0,sel=null,matched=0,timerInt=null,secs=0;
+function speak(t){if(!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=0.85;const v=window.speechSynthesis.getVoices();const p=v.find(x=>x.lang.startsWith('en')&&x.name.includes('Google'))||v.find(x=>x.lang.startsWith('en-US'));if(p)u.voice=p;window.speechSynthesis.speak(u);}
+function show(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('s-'+id).classList.add('active');if(btn)btn.classList.add('active');updateP();if(id==='game'&&!timerInt)initMatch();}
+function updateP(){const m={warm:16,teach:33,quiz:55,game:75,wrap:100};document.getElementById('pf').style.width=(m[currentSection]||0)+'%';}
+let currentSection='reading';
+function show(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('s-'+id).classList.add('active');if(btn)btn.classList.add('active');currentSection=id;updateP();if(id==='game'&&!timerInt)initMatch();}
+function initQuiz(){document.getElementById('quizBox').innerHTML=quizData.map((q,i)=>`<div class="quiz-q" id="q${i}"><div class="q-text"><span class="q-num">${i+1}</span>${q.q}</div><div class="options">${q.options.map((o,j)=>`<div class="opt" onclick="check(${i},${j},this)"><span class="opt-letter">${String.fromCharCode(65+j)}</span><span>${o}</span></div>`).join('')}</div><div class="exp" id="e${i}">${q.ex}</div></div>`).join('');answered=[...Array(quizData.length)].fill(false);score=0;}
+function check(qi,oi,el){if(answered[qi])return;answered[qi]=true;const c=document.getElementById('q'+qi),opts=c.querySelectorAll('.opt'),exp=document.getElementById('e'+qi);opts.forEach(o=>o.classList.add('disabled'));if(oi===quizData[qi].a){el.classList.add('correct-answer');c.classList.add('correct');score++;}else{el.classList.add('wrong-answer');c.classList.add('wrong');opts[quizData[qi].a].classList.add('correct-answer');}exp.classList.add('show');if(answered.every(a=>a))setTimeout(showScore,600);}
+function showScore(){const c=document.getElementById('scoreCard');c.style.display='block';document.getElementById('scNum').textContent=score+'/8';document.getElementById('scCircle').style.setProperty('--sdeg',(score/8*360)+'deg');let s='',m='';if(score===8){s='⭐⭐⭐⭐⭐';m='🏆 滿分！你是 Be 動詞大師！';}else if(score>=6){s='⭐⭐⭐⭐';m='👏 很棒！幾乎全對！';}else if(score>=4){s='⭐⭐⭐';m='👍 不錯喔！繼續加油！';}else{s='⭐⭐';m='💪 再多練習幾次吧！';}document.getElementById('scStars').textContent=s;document.getElementById('scMsg').textContent=m;if(score>=6)fireConfetti();c.scrollIntoView({behavior:'smooth'});}
+function resetQuiz(){document.getElementById('scoreCard').style.display='none';initQuiz();window.scrollTo({top:0,behavior:'smooth'});}
+function initMatch(){sel=null;matched=0;secs=0;document.getElementById('matchResult').style.display='none';document.getElementById('mCount').textContent='0';if(timerInt)clearInterval(timerInt);timerInt=setInterval(()=>{secs++;document.getElementById('timer').textContent=secs;},1000);const L=[...matchPairs].sort(()=>Math.random()-0.5);const R=[...matchPairs].sort(()=>Math.random()-0.5);const c=document.getElementById('matchGame');c.innerHTML='';const lc=document.createElement('div');lc.style.cssText='display:flex;flex-direction:column;gap:8px;';L.forEach(p=>{const d=document.createElement('div');d.className='match-item';d.dataset.type='l';d.dataset.val=p.left;d.dataset.pair=p.right;d.textContent=p.left;d.onclick=()=>mc(d);lc.appendChild(d);});const rc=document.createElement('div');rc.style.cssText='display:flex;flex-direction:column;gap:8px;';R.forEach(p=>{const d=document.createElement('div');d.className='match-item';d.dataset.type='r';d.dataset.val=p.right;d.dataset.pair=p.left;d.textContent=p.right;d.onclick=()=>mc(d);rc.appendChild(d);});c.appendChild(lc);c.appendChild(rc);}
+function mc(el){if(el.classList.contains('matched'))return;if(!sel){sel=el;el.classList.add('selected');}else if(sel===el){el.classList.remove('selected');sel=null;}else{if(sel.dataset.type===el.dataset.type){sel.classList.remove('selected');el.classList.add('selected');sel=el;return;}let ok=false;if(sel.dataset.type==='l')ok=sel.dataset.pair===el.dataset.val;else ok=sel.dataset.val===el.dataset.pair;if(ok){sel.classList.remove('selected');sel.classList.add('matched');el.classList.add('matched');matched++;document.getElementById('mCount').textContent=matched;sel=null;if(matched===8){clearInterval(timerInt);timerInt=null;document.getElementById('finalTime').textContent=secs;document.getElementById('matchResult').style.display='block';fireConfetti();}}else{sel.classList.add('wrong-match');el.classList.add('wrong-match');setTimeout(()=>{sel.classList.remove('selected','wrong-match');el.classList.remove('wrong-match');sel=null;},500);}}}
+function toggleCheck(li){li.classList.toggle('checked');const cb=li.querySelector('.ck-box');cb.textContent=li.classList.contains('checked')?'✓':'';}
+function fireConfetti(){const c=document.getElementById('confettiWrap');const colors=['#a855f7','#f0c040','#6db86d','#5bb5f0','#c084fc','#ffe08a'];for(let i=0;i<50;i++){const p=document.createElement('div');p.className='confetti-piece';p.style.left=Math.random()*100+'%';p.style.background=colors[i%colors.length];p.style.animationDelay=Math.random()*1.5+'s';p.style.animationDuration=(2+Math.random()*2)+'s';c.appendChild(p);setTimeout(()=>p.remove(),4000);}}
+function createStars(){const bg=document.getElementById('bg');for(let i=0;i<40;i++){const s=document.createElement('div');s.className='star';const sz=2+Math.random()*4;s.style.width=sz+'px';s.style.height=sz+'px';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDuration=(2+Math.random()*4)+'s';s.style.animationDelay=Math.random()*3+'s';bg.appendChild(s);}}
+window.addEventListener('load',()=>{createStars();initQuiz();updateP();if('speechSynthesis'in window)window.speechSynthesis.getVoices();});
+</script>
+</body>
+</html>

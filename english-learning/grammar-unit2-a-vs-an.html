@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚔️ 單元二：a vs an 世紀大對決 | Grammar I-1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800;900&display=swap');
+  :root {
+    --bg-deep: #0a0f1a; --bg-mid: #121a2e; --bg-card: #1a2440;
+    --accent: #5bb5f0; --accent-light: #9ed8ff; --accent-glow: rgba(91,181,240,0.25);
+    --gold: #f0c040; --gold-light: #ffe08a;
+    --grass: #6db86d; --grass-light: #9ee89e;
+    --coral: #e06060; --coral-light: #ff9090;
+    --purple: #a855f7; --purple-light: #c084fc;
+    --text: #e8edf8; --text-muted: rgba(255,255,255,0.55);
+    --card: rgba(255,255,255,0.05); --border: rgba(255,255,255,0.08);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Nunito','Noto Sans TC',sans-serif; background:var(--bg-deep); color:var(--text); min-height:100vh; overflow-x:hidden; }
+  .bg { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; overflow:hidden; }
+  .particle { position:absolute; border-radius:50%; animation:floatUp linear infinite; opacity:0.12; }
+  @keyframes floatUp { 0%{transform:translateY(100vh) scale(0);opacity:0} 50%{opacity:0.15} 100%{transform:translateY(-20px) scale(1);opacity:0} }
+  .app { position:relative; z-index1; max-width:900px; margin:0 auto; padding:20px; }
+  .header { text-align:center; padding:40px 20px 30px; }
+  .header h1 { font-size:2.2em; font-weight:900; background:linear-gradient(135deg,var(--accent-light),var(--gold),var(--purple-light)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:8px; }
+  .header .sub { font-size:1.05em; color:var(--text-muted); }
+  .mascot { font-size:3em; display:block; margin-bottom:10px; animation:swordFight 3s ease-in-out infinite; }
+  @keyframes swordFight { 0%,100%{transform:rotate(-5deg)} 50%{transform:rotate(5deg)} }
+  .nav-tabs { display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; justify-content:center; }
+  .nav-tab { padding:10px 18px; border-radius:50px; border:2px solid rgba(91,181,240,0.3); background:transparent; color:var(--accent-light); font-family:inherit; font-size:0.9em; font-weight:700; cursor:pointer; transition:all 0.3s; }
+  .nav-tab:hover { background:rgba(91,181,240,0.1); border-color:var(--accent); transform:translateY(-2px); }
+  .nav-tab.active { background:var(--accent); color:var(--bg-deep); border-color:var(--accent); box-shadow:0 4px 20px var(--accent-glow); }
+  .section { display:none; animation:fadeIn 0.4s ease; }
+  .section.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
+  .card { background:var(--card); backdrop-filter:blur(20px); border:1px solid var(--border); border-radius:22px; padding:30px; margin-bottom:18px; position:relative; overflow:hidden; }
+  .card::before { content:''; position:absolute; top:0; left:0; width:100%; height:3px; background:linear-gradient(90deg,var(--accent),var(--gold),var(--purple)); }
+  .card-title { font-size:1.35em; font-weight:800; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+  .card-title .icon { font-size:1.25em; }
+  .speak-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 18px; border-radius:50px; border:2px solid var(--accent); background:transparent; color:var(--accent-light); font-family:inherit; font-size:0.9em; font-weight:700; cursor:pointer; transition:all 0.3s; margin:3px; }
+  .speak-btn:hover { background:var(--accent); color:var(--bg-deep); transform:translateY(-2px); box-shadow:0 4px 15px var(--accent-glow); }
+  .speak-btn.big { padding:14px 28px; font-size:1.1em; }
+  .speak-btn.gold { border-color:var(--gold); color:var(--gold); }
+  .speak-btn.gold:hover { background:var(--gold); color:var(--bg-deep); }
+  .progress-bar { width:100%; height:8px; background:rgba(255,255,255,0.06); border-radius:10px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:10px; transition:width 0.5s; }
+  /* Chant */
+  .chant-box { text-align:center; padding:24px; background:linear-gradient(135deg,rgba(91,181,240,0.08),rgba(240,192,64,0.08)); border-radius:16px; border:1px solid rgba(91,181,240,0.15); margin:14px 0; }
+  .chant-line { font-size:1.15em; font-weight:700; color:var(--accent-light); margin:8px 0; cursor:pointer; transition:all 0.2s; }
+  .chant-line:hover { color:var(--gold-light); transform:scale(1.03); }
+  .chant-action { font-size:0.9em; color:var(--text-muted); margin-top:4px; }
+  /* Flash cards */
+  .flash-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin:14px 0; }
+  .flash-card { background:rgba(255,255,255,0.04); border:2px solid var(--border); border-radius:16px; padding:18px; text-align:center; cursor:pointer; transition:all 0.4s; position:relative; min-height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .flash-card:hover { transform:translateY(-3px); }
+  .flash-card .fc-word { font-size:1.3em; font-weight:800; margin-bottom:6px; }
+  .flash-card .fc-article { font-size:1.5em; font-weight:900; margin-bottom:4px; }
+  .flash-card .fc-reason { font-size:0.8em; color:var(--text-muted); }
+  .flash-card.a-card { border-color:rgba(91,181,240,0.3); }
+  .flash-card.a-card .fc-article { color:var(--accent-light); }
+  .flash-card.an-card { border-color:rgba(240,192,64,0.3); }
+  .flash-card.an-card .fc-article { color:var(--gold); }
+  .flash-card.flipped { background:rgba(91,181,240,0.08); }
+  /* Rule table */
+  .rule-table { width:100%; border-collapse:separate; border-spacing:0 5px; margin:12px 0; }
+  .rule-table th { background:rgba(91,181,240,0.12); color:var(--accent-light); padding:9px 12px; font-size:0.88em; text-align:left; }
+  .rule-table td { background:rgba(255,255,255,0.03); padding:9px 12px; font-size:0.92em; }
+  .rule-table tr td:first-child { border-radius:8px 0 0 8px; font-weight:700; }
+  .rule-table tr td:last-child { border-radius:0 8px 8px 0; }
+  .rule-table .a-mark { color:var(--accent-light); font-weight:800; }
+  .rule-table .an-mark { color:var(--gold); font-weight:800; }
+  /* Quiz */
+  .quiz-q { background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:18px; padding:22px; margin-bottom:14px; transition:all 0.3s; }
+  .quiz-q.answered { pointer-events:none; }
+  .quiz-q.correct { border-color:var(--grass); background:rgba(109,184,109,0.07); }
+  .quiz-q.wrong { border-color:var(--coral); background:rgba(224,96,96,0.07); }
+  .q-num { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--gold)); color:var(--bg-deep); font-weight:800; font-size:0.9em; margin-right:8px; }
+  .q-text { font-size:1.02em; font-weight:600; margin-bottom:12px; line-height:1.5; }
+  .options { display:flex; flex-direction:column; gap:8px; }
+  .opt { display:flex; align-items:center; gap:10px; padding:12px 16px; border-radius:12px; border:2px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.02); cursor:pointer; transition:all 0.3s; font-size:0.95em; }
+  .opt:hover:not(.disabled) { border-color:var(--accent); background:rgba(91,181,240,0.07); transform:translateX(4px); }
+  .opt.correct-answer { border-color:var(--grass)!important; background:rgba(109,184,109,0.15)!important; }
+  .opt.wrong-answer { border-color:var(--coral)!important; background:rgba(224,96,96,0.12)!important; }
+  .opt.disabled { cursor:default; }
+  .opt-letter { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.08); font-weight:700; font-size:0.85em; flex-shrink:0; }
+  .exp { margin-top:12px; padding:12px 16px; background:rgba(0,0,0,0.2); border-radius:10px; font-size:0.92em; line-height:1.6; display:none; border-left:3px solid var(--grass); }
+  .exp.show { display:block; animation:fadeIn 0.3s; }
+  /* Score */
+  .score-box { text-align:center; padding:28px; }
+  .score-circle { width:130px; height:130px; border-radius:50%; background:conic-gradient(var(--gold) var(--sdeg), rgba(255,255,255,0.05) 0); display:flex; align-items:center; justify-content:center; margin:0 auto 14px; position:relative; }
+  .score-circle::before { content:''; position:absolute; width:102px; height:102px; border-radius:50%; background:var(--bg-deep); }
+  .score-num { position:relative; z-index:1; font-size:2.2em; font-weight:900; color:var(--gold-light); }
+  .score-msg { font-size:1.15em; font-weight:700; color:var(--accent-light); }
+  .stars { font-size:1.8em; letter-spacing:4px; }
+  /* Speed quiz */
+  .speed-item { display:flex; align-items:center; gap:12px; padding:14px 18px; background:rgba(255,255,255,0.03); border-radius:14px; margin-bottom:10px; border:1px solid var(--border); flex-wrap:wrap; }
+  .speed-word { font-size:1.2em; font-weight:700; color:var(--accent-light); min-width:120px; }
+  .speed-btns { display:flex; gap:8px; }
+  .speed-btn { padding:8px 20px; border-radius:50px; border:2px solid var(--border); background:transparent; color:var(--text); font-family:inherit; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:1em; }
+  .speed-btn:hover { border-color:var(--accent); }
+  .speed-btn.sel-a { border-color:var(--accent); background:rgba(91,181,240,0.15); color:var(--accent-light); }
+  .speed-btn.sel-an { border-color:var(--gold); background:rgba(240,192,64,0.15); color:var(--gold); }
+  .speed-btn.correct { border-color:var(--grass)!important; background:rgba(109,184,109,0.2)!important; color:var(--grass-light)!important; }
+  .speed-btn.wrong { border-color:var(--coral)!important; background:rgba(224,96,96,0.15)!important; color:var(--coral-light)!important; }
+  .speed-result { font-size:0.85em; font-weight:600; }
+  /* Confetti */
+  .confetti-wrap { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; }
+  .confetti-piece { position:absolute; width:10px; height:10px; border-radius:2px; animation:confFall 3s ease-out forwards; }
+  @keyframes confFall { 0%{transform:translateY(-10px) rotate(0);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+  /* Checklist */
+  .checklist { list-style:none; padding:0; }
+  .checklist li { display:flex; align-items:center; gap:12px; padding:12px 16px; background:rgba(255,255,255,0.03); border-radius:12px; margin-bottom:8px; cursor:pointer; transition:all 0.3s; border:1px solid var(--border); }
+  .checklist li:hover { background:rgba(91,181,240,0.06); }
+  .checklist li.checked { background:rgba(109,184,109,0.08); border-color:rgba(109,184,109,0.2); }
+  .checklist .ck-box { width:26px; height:26px; border-radius:6px; border:2px solid var(--accent); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.85em; transition:all 0.3s; }
+  .checklist li.checked .ck-box { background:var(--grass); border-color:var(--grass); color:var(--bg-deep); }
+  .checklist .ck-text { flex:1; font-size:0.95em; }
+  .checklist li.checked .ck-text { text-decoration:line-through; opacity:0.6; }
+  /* Golden quote */
+  .golden-quote { text-align:center; padding:24px; background:linear-gradient(135deg,rgba(240,192,64,0.08),rgba(91,181,240,0.08)); border-radius:16px; border:1px solid rgba(240,192,64,0.15); margin:16px 0; }
+  .golden-quote .quote-en { font-size:1.3em; font-weight:800; color:var(--gold-light); margin-bottom:6px; }
+  .golden-quote .quote-zh { font-size:0.95em; color:var(--text-muted); }
+  @media(max-width:640px) {
+    .header h1 { font-size:1.5em; } .card { padding:20px; }
+    .flash-grid { grid-template-columns:1fr 1fr; } .nav-tab { padding:8px 12px; font-size:0.82em; }
+  }
+  ::-webkit-scrollbar { width:7px; } ::-webkit-scrollbar-track { background:var(--bg-deep); } ::-webkit-scrollbar-thumb { background:var(--bg-card); border-radius:4px; }
+  .footer { text-align:center; padding:28px; color:rgba(255,255,255,0.2); font-size:0.85em; }
+</style>
+</head>
+<body>
+<div class="bg" id="bg"></div>
+<div class="confetti-wrap" id="confettiWrap"></div>
+<div class="app">
+  <header class="header">
+    <span class="mascot">⚔️</span>
+    <h1>單元二：a vs an 世紀大對決</h1>
+    <p class="sub">Grammar I-1 · 真相只有一個——看發音，不看字母！</p>
+  </header>
+  <div class="progress-bar"><div class="progress-fill" id="pf" style="width:0%"></div></div>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="show('warm',this)">🔥 暖身</button>
+    <button class="nav-tab" onclick="show('teach',this)">📖 講解</button>
+    <button class="nav-tab" onclick="show('quiz',this)">🎯 測驗</button>
+    <button class="nav-tab" onclick="show('speed',this)">⚡ 快問快答</button>
+    <button class="nav-tab" onclick="show('wrap',this)">💬 收尾</button>
+  </nav>
+
+  <!-- WARM UP -->
+  <div class="section active" id="s-warm">
+    <div class="card">
+      <div class="card-title"><span class="icon">🍎</span> 蘋果之歌 — 暖身節奏</div>
+      <p style="color:var(--text-muted); margin-bottom:16px;">跟著節奏唸，邊唸邊做動作！點擊每一句聽發音 👇</p>
+      <div class="chant-box">
+        <div class="chant-line" onclick="speak('A, A, A — consonant sounds get A!')">A, A, A — 後面子音用 a！</div>
+        <div class="chant-action">✊ 出一根手指</div>
+        <div class="chant-line" style="margin-top:16px" onclick="speak('AN, AN, AN — vowel sounds get AN!')">AN, AN, AN — 後面母音用 an！</div>
+        <div class="chant-action">✊ 出一根手指 + 🖐️ 再出一根</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">✊</span> 比一比練習</div>
+      <p style="color:var(--text-muted); margin-bottom:14px;">老師唸單字，你比動作！</p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="action-card" onclick="speak('apple')">
+          <span class="act-emoji">🍎</span>
+          <div class="act-text"><div class="act-en">apple</div><div class="act-zh">→ AN（母音開頭）</div></div>
+          <span class="act-target">🖐️</span>
+        </div>
+        <div class="action-card" onclick="speak('cat')">
+          <span class="act-emoji">🐱</span>
+          <div class="act-text"><div class="act-en">cat</div><div class="act-zh">→ A（子音開頭）</div></div>
+          <span class="act-target">✊</span>
+        </div>
+        <div class="action-card" onclick="speak('egg')">
+          <span class="act-emoji">🥚</span>
+          <div class="act-text"><div class="act-en">egg</div><div class="act-zh">→ AN（母音開頭）</div></div>
+          <span class="act-target">🖐️</span>
+        </div>
+        <div class="action-card" onclick="speak('dog')">
+          <span class="act-emoji">🐕</span>
+          <div class="act-text"><div class="act-en">dog</div><div class="act-zh">→ A（子音開頭）</div></div>
+          <span class="act-target">✊</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEACH -->
+  <div class="section" id="s-teach">
+    <div class="card">
+      <div class="card-title"><span class="icon">🔍</span> 真相只有一個——核心概念</div>
+      <div style="background:rgba(91,181,240,0.08); border-radius:12px; padding:14px 18px; margin-bottom:14px; border-left:3px solid var(--accent);">
+        <strong style="color:var(--accent-light);">a</strong> 和 <strong style="color:var(--gold);">an</strong> 都是「不定冠詞」，意思都是「一個」。<br>
+        <strong>差別在於後面那個字的「發音」，不是看起來像什麼！</strong>
+      </div>
+      <div style="display:flex; gap:12px; margin-bottom:14px;">
+        <div style="flex:1; padding:16px; background:rgba(91,181,240,0.08); border-radius:12px; text-align:center; border:2px solid rgba(91,181,240,0.2);">
+          <div style="font-size:2em; font-weight:900; color:var(--accent-light);">a</div>
+          <div style="color:var(--text-muted); font-size:0.9em;">+ 子音開頭的單字</div>
+        </div>
+        <div style="flex:1; padding:16px; background:rgba(240,192,64,0.08); border-radius:12px; text-align:center; border:2px solid rgba(240,192,64,0.2);">
+          <div style="font-size:2em; font-weight:900; color:var(--gold);">an</div>
+          <div style="color:var(--text-muted); font-size:0.9em;">+ 母音開頭的單字</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🃏</span> 單字閃卡 — 點擊聽發音</div>
+      <div class="flash-grid">
+        <div class="flash-card an-card" onclick="speak('an apple')"><div class="fc-article">an</div><div class="fc-word">apple</div><div class="fc-reason">a 是母音</div></div>
+        <div class="flash-card a-card" onclick="speak('a cat')"><div class="fc-article">a</div><div class="fc-word">cat</div><div class="fc-reason">c 是子音</div></div>
+        <div class="flash-card an-card" onclick="speak('an egg')"><div class="fc-article">an</div><div class="fc-word">egg</div><div class="fc-reason">e 是母音</div></div>
+        <div class="flash-card a-card" onclick="speak('a dog')"><div class="fc-article">a</div><div class="fc-word">dog</div><div class="fc-reason">d 是子音</div></div>
+        <div class="flash-card an-card" onclick="speak('an hour')"><div class="fc-article">an</div><div class="fc-word">hour</div><div class="fc-reason">h 不發音</div></div>
+        <div class="flash-card a-card" onclick="speak('a university')"><div class="fc-article">a</div><div class="fc-word">university</div><div class="fc-reason">唸 "you"</div></div>
+        <div class="flash-card an-card" onclick="speak('an FBI agent')"><div class="fc-article">an</div><div class="fc-word">FBI</div><div class="fc-reason">唸 "eff"</div></div>
+        <div class="flash-card a-card" onclick="speak('a European')"><div class="fc-article">a</div><div class="fc-word">European</div><div class="fc-reason">唸 "you"</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">⚠️</span> 陷阱題——看發音，不看字母！</div>
+      <table class="rule-table">
+        <thead><tr><th>單字</th><th>發音</th><th>正確</th><th>原因</th></tr></thead>
+        <tbody>
+          <tr><td>hour</td><td>/ˈaʊər/</td><td class="an-mark">an hour</td><td>h 不發音，像 "our"</td></tr>
+          <tr><td>honest</td><td>/ˈɑnɪst/</td><td class="an-mark">an honest person</td><td>h 不發音</td></tr>
+          <tr><td>university</td><td>/juːnɪˈvɜːrsəti/</td><td class="a-mark">a university</td><td>唸 "you"，j 是子音</td></tr>
+          <tr><td>European</td><td>/jʊərəˈpiːən/</td><td class="a-mark">a European</td><td>唸 "you"，j 是子音</td></tr>
+          <tr><td>FBI</td><td>/ˌɛf.biːˈaɪ/</td><td class="an-mark">an FBI agent</td><td>唸 "eff"，e 是母音</td></tr>
+          <tr><td>M</td><td>/ɛm/</td><td class="an-mark">an M</td><td>唸 "em"，e 是母音</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="section" id="s-quiz">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span> 閱讀測驗 — a vs an 選擇題</div>
+      <p style="color:var(--text-muted); margin-bottom:16px;">共 8 題，選出正確的答案！</p>
+      <div id="quizBox"></div>
+    </div>
+    <div class="card" id="scoreCard" style="display:none;">
+      <div class="score-box">
+        <div class="score-circle" id="scCircle"><span class="score-num" id="scNum">0</span></div>
+        <div class="stars" id="scStars"></div>
+        <p class="score-msg" id="scMsg"></p>
+        <button class="speak-btn gold" style="margin-top:18px" onclick="resetQuiz()">🔄 再試一次</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPEED QUIZ -->
+  <div class="section" id="s-speed">
+    <div class="card">
+      <div class="card-title"><span class="icon">⚡</span> 實況快問快答</div>
+      <p style="color:var(--text-muted); margin-bottom:16px;">看到單字，立刻選出 a 或 an！</p>
+      <div id="speedBox"></div>
+      <div id="speedResult" style="text-align:center;margin-top:16px;display:none;">
+        <p style="font-size:1.1em;font-weight:700;color:var(--gold);">⚡ 完成！答對 <span id="speedScore">0</span>/10 題</p>
+        <button class="speak-btn" style="margin-top:12px" onclick="resetSpeed()">🔄 再玩一次</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WRAP UP -->
+  <div class="section" id="s-wrap">
+    <div class="card">
+      <div class="card-title"><span class="icon">💬</span> 今日金句</div>
+      <div class="golden-quote">
+        <div class="quote-en">"An 'M' in the alphabet is not a letter—it's a SOUND."</div>
+        <div class="quote-zh">M 在字母表裡不是字母，是聲音！</div>
+      </div>
+      <button class="speak-btn big gold" onclick="speak(\"An 'M' in the alphabet is not a letter—it's a SOUND.\")">🔊 聽發音</button>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🛂</span> 今日收穫護照</div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">a + 子音開頭，an + 母音開頭</div></li>
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">規則是看「發音」，不是看「字母」</div></li>
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">hour / honest 用 an（h 不發音）</div></li>
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">university / European 用 a（唸 "you"）</div></li>
+        <li onclick="toggleCheck(this)"><div class="ck-box"></div><div class="ck-text">FBI / M 用 an（唸 "eff" / "em"）</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">⚔️ 博幼英文文法 I-1 · 單元二：a vs an 世紀大對決</div>
+</div>
+
+<script>
+const quizData = [
+  {q:"___ apple",opts:["a","an"],a:1,ex:"apple 是母音 a 開頭，用 an。"},
+  {q:"___ cat",opts:["a","an"],a:0,ex:"cat 是子音 c 開頭，用 a。"},
+  {q:"___ hour",opts:["a","an"],a:1,ex:"hour 的 h 不發音，唸 "our"，用 an。"},
+  {q:"___ university",opts:["a","an"],a:0,ex:"university 唸 "you-niversity"，j 是子音，用 a。"},
+  {q:"___ honest person",opts:["a","an"],a:1,ex:"honest 的 h 不發音，用 an。"},
+  {q:"___ European country",opts:["a","an"],a:0,ex:"European 唸 "you-ropean"，j 是子音，用 a。"},
+  {q:"___ FBI agent",opts:["a","an"],a:1,ex:"FBI 唸 "eff-bee-eye"，e 是母音，用 an。"},
+  {q:"___ egg",opts:["a","an"],a:1,ex:"egg 是母音 e 開頭，用 an。"}
+];
+const speedWords = [
+  {w:"elephant",a:"an",r:"e 是母音"},{w:"boy",a:"a",r:"b 是子音"},
+  {w:"orange",a:"an",r:"o 是母音"},{w:"school",a:"a",r:"s 是子音"},
+  {w:"eye",a:"an",r:"e 是母音"},{w:"TV",a:"a",r:"唸 tē-vē，t 是子音"},
+  {w:"8 (eight)",a:"an",r:"e 是母音"},{w:"dog",a:"a",r:"d 是子音"},
+  {w:"hour",a:"an",r:"h 不發音"},{w:"university",a:"a",r:"唸 you，j 是子音"}
+];
+let answered=[],score=0,speedAnswered=[],speedScore=0;
+function speak(t){if(!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=0.85;const v=window.speechSynthesis.getVoices();const p=v.find(x=>x.lang.startsWith('en')&&x.name.includes('Google'))||v.find(x=>x.lang.startsWith('en-US'));if(p)u.voice=p;window.speechSynthesis.speak(u);}
+let currentSection='reading';
+function show(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('s-'+id).classList.add('active');if(btn)btn.classList.add('active');currentSection=id;updateP();}
+function updateP(){const m={warm:16,teach:33,quiz:55,speed:75,wrap:100};document.getElementById('pf').style.width=(m[currentSection]||0)+'%';}
+function initQuiz(){document.getElementById('quizBox').innerHTML=quizData.map((q,i)=>`<div class="quiz-q" id="q${i}"><div class="q-text"><span class="q-num">${i+1}</span>${q.q}</div><div class="options">${q.options.map((o,j)=>`<div class="opt" onclick="check(${i},${j},this)"><span class="opt-letter">${String.fromCharCode(65+j)}</span><span>${o}</span></div>`).join('')}</div><div class="exp" id="e${i}">${q.ex}</div></div>`).join('');answered=[...Array(quizData.length)].fill(false);score=0;}
+function check(qi,oi,el){if(answered[qi])return;answered[qi]=true;const c=document.getElementById('q'+qi),opts=c.querySelectorAll('.opt'),exp=document.getElementById('e'+qi);opts.forEach(o=>o.classList.add('disabled'));if(oi===quizData[qi].a){el.classList.add('correct-answer');c.classList.add('correct');score++;}else{el.classList.add('wrong-answer');c.classList.add('wrong');opts[quizData[qi].a].classList.add('correct-answer');}exp.classList.add('show');if(answered.every(a=>a))setTimeout(showScore,600);}
+function showScore(){const c=document.getElementById('scoreCard');c.style.display='block';document.getElementById('scNum').textContent=score+'/8';document.getElementById('scCircle').style.setProperty('--sdeg',(score/8*360)+'deg');let s='',m='';if(score===8){s='⭐⭐⭐⭐⭐';m='🏆 滿分！你是 a/an 大師！';}else if(score>=6){s='⭐⭐⭐⭐';m='👏 很棒！幾乎全對！';}else if(score>=4){s='⭐⭐⭐';m='👍 不錯喔！繼續加油！';}else{s='⭐⭐';m='💪 再多練習幾次吧！';}document.getElementById('scStars').textContent=s;document.getElementById('scMsg').textContent=m;if(score>=6)fireConfetti();c.scrollIntoView({behavior:'smooth'});}
+function resetQuiz(){document.getElementById('scoreCard').style.display='none';initQuiz();window.scrollTo({top:0,behavior:'smooth'});}
+function initSpeed(){const box=document.getElementById('speedBox');box.innerHTML='';speedAnswered=[...Array(speedWords.length)].fill(false);speedScore=0;document.getElementById('speedResult').style.display='none';speedWords.forEach((sw,i)=>{const d=document.createElement('div');d.className='speed-item';d.id='sp'+i;d.innerHTML=`<span class="speed-word" onclick="speak('${sw.w}')">${sw.w}</span><div class="speed-btns"><button class="speed-btn" onclick="speedCheck(${i},'a',this)">a</button><button class="speed-btn" onclick="speedCheck(${i},'an',this)">an</button></div><span class="speed-result" id="sr${i}"></span>`;box.appendChild(d);});}
+function speedCheck(idx,choice,btn){if(speedAnswered[idx])return;speedAnswered[idx]=true;const item=document.getElementById('sp'+idx),btns=item.querySelectorAll('.speed-btn'),sr=document.getElementById('sr'+idx);btns.forEach(b=>b.style.pointerEvents='none');const correct=speedWords[idx].a;if(choice===correct){btn.classList.add('correct');sr.textContent='✅ '+speedWords[idx].r;sr.style.color='var(--grass-light)';speedScore++;}else{btn.classList.add('wrong');btns.forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});sr.textContent='❌ '+speedWords[idx].r;sr.style.color='var(--coral-light)';}if(speedAnswered.every(a=>a)){document.getElementById('speedScore').textContent=speedScore;document.getElementById('speedResult').style.display='block';if(speedScore>=8)fireConfetti();}}
+function resetSpeed(){initSpeed();}
+function toggleCheck(li){li.classList.toggle('checked');const cb=li.querySelector('.ck-box');cb.textContent=li.classList.contains('checked')?'✓':'';}
+function fireConfetti(){const c=document.getElementById('confettiWrap');const colors=['#5bb5f0','#f0c040','#6db86d','#a855f7','#9ed8ff','#ffe08a'];for(let i=0;i<50;i++){const p=document.createElement('div');p.className='confetti-piece';p.style.left=Math.random()*100+'%';p.style.background=colors[i%colors.length];p.style.animationDelay=Math.random()*1.5+'s';p.style.animationDuration=(2+Math.random()*2)+'s';c.appendChild(p);setTimeout(()=>p.remove(),4000);}}
+function createParticles(){const bg=document.getElementById('bg');const colors=['#5bb5f0','#f0c040','#6db86d','#a855f7'];for(let i=0;i<25;i++){const p=document.createElement('div');p.className='particle';const sz=4+Math.random()*8;p.style.width=sz+'px';p.style.height=sz+'px';p.style.left=Math.random()*100+'%';p.style.background=colors[i%colors.length];p.style.animationDuration=(8+Math.random()*12)+'s';p.style.animationDelay=Math.random()*8+'s';bg.appendChild(p);}}
+window.addEventListener('load',()=>{createParticles();initQuiz();initSpeed();updateP();if('speechSynthesis'in window)window.speechSynthesis.getVoices();});
+</script>
+</body>
+</html>
